@@ -1,71 +1,71 @@
 '''
 Run this script using:
 
-python move_arm_to_home.py 192.168.2.100 192.168.2.108 20
+python3 move_arm_to_home.py 192.168.1.208
 '''
 
 import sys
 import os
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(os.path.join(parent_dir, 'RoboticsToolBox'))
-import pyRobotiqGripper
-from Bestman_sim_flexiv import *
+# import pyRobotiqGripper
+from Bestman_real_xarm6 import *
 
 def main():
     # Parse Arguments
     argparser = argparse.ArgumentParser(description="Move the robot arm to follow a trajectory.")
     # Required arguments
     argparser.add_argument("robot_ip", help="IP address of the robot server")
-    argparser.add_argument("local_ip", help="IP address of this PC")
-    argparser.add_argument("frequency", type=int, help="Command frequency, 1 to 200 [Hz]")
+    # argparser.add_argument("local_ip", help="IP address of this PC")
+    # argparser.add_argument("frequency", type=int, help="Command frequency, 1 to 200 [Hz]")
     # Optional arguments
-    argparser.add_argument("--hold", action="store_true", help="Robot holds current joint positions, otherwise do a sine-sweep")
+    # argparser.add_argument("--hold", action="store_true", help="Robot holds current joint positions, otherwise do a sine-sweep")
     args = argparser.parse_args()
 
     # Validate the frequency argument
-    frequency = args.frequency
-    assert 1 <= frequency <= 200, "Invalid <frequency> input"
+    # frequency = args.frequency
+    # assert 1 <= frequency <= 200, "Invalid <frequency> input"
 
-    log = flexivrdk.Log()
+    # log = flexivrdk.Log()
 
     try:
         # Instantiate the robot interface
-        bestman = Bestman_Real_Flexiv(args.robot_ip, args.local_ip, args.frequency)
+        bestman = Bestman_Real_Xarm6(args.robot_ip,)
 
         # Clear fault on the robot server if any
-        if bestman.robot.isFault():
-            log.warn("Fault occurred on the robot server, trying to clear ...")
-            bestman.robot.clearFault()
-            time.sleep(2)
-            if bestman.robot.isFault():
-                log.error("Fault cannot be cleared, exiting ...")
-                return
-            log.info("Fault on the robot server is cleared")
+        # if bestman.robot.isFault():
+        #     log.warn("Fault occurred on the robot server, trying to clear ...")
+        #     bestman.robot.clearFault()
+        #     time.sleep(2)
+        #     if bestman.robot.isFault():
+        #         log.error("Fault cannot be cleared, exiting ...")
+        #         return
+        #     log.info("Fault on the robot server is cleared")
 
         # Enable the robot, ensuring the E-stop is released before enabling
-        log.info("Enabling robot ...")
-        bestman.robot.enable()
+        # log.info("Enabling robot ...")
+        # bestman.robot.enable()
 
         # Wait for the robot to become operational
-        seconds_waited = 0
-        while not bestman.robot.isOperational():
-            time.sleep(1)
-            seconds_waited += 1
-            if seconds_waited == 10:
-                log.warn(
-                    "Still waiting for robot to become operational. Please "
-                    "check that the robot 1) has no fault, 2) is booted "
-                    "into Auto mode"
-                )
+        # seconds_waited = 0
+        # while not bestman.robot.isOperational():
+        #     time.sleep(1)
+        #     seconds_waited += 1
+        #     if seconds_waited == 10:
+        #         log.warn(
+        #             "Still waiting for robot to become operational. Please "
+        #             "check that the robot 1) has no fault, 2) is booted "
+        #             "into Auto mode"
+        #         )
 
-        log.info("Robot is now operational")
+        # log.info("Robot is now operational")
 
         # Get and log current joint values and bounds
-        joint_angles = bestman.get_current_joint_angles()
-        log.info(f"Current joint values: {joint_angles}")
+        # joint_angles = bestman.get_current_joint_angles()
+        # log.info(f"Current joint values: {joint_angles}")
 
-        joint_bounds = bestman.get_joint_bounds()
-        log.info(f"Current joint bounds: {joint_bounds}")
+        # joint_bounds = bestman.get_joint_bounds()
+        # log.info(f"Current joint bounds: {joint_bounds}")
 
         # Go back to home pose
         bestman.go_home()
@@ -73,7 +73,8 @@ def main():
 
     except Exception as e:
         # Log any exceptions that occur
-        log.error(str(e))
+        print("error")
+        # log.error(str(e))
 
 
 if __name__ == "__main__":

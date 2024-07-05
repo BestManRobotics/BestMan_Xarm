@@ -16,33 +16,42 @@ README TO BE UPDATE!
 
 ## 💻 Installation
 
-- Clone the Repository
+- (Optional) Create conda environment
 
-```
-cd /home/$(whoami)
-git clone https://github.com/yding25/BestMan_Flexiv.git
-```
+    ```
+    conda env create -f basic_environment.yaml
+    ```
 
-- Create conda environment
+- Install xArm-Python-SDK
 
-```
-cd ./flexiv_rdk/BestMan_Flexiv/Install
-conda env create -f basic_environment.yaml
-```
+    ```bash
+    cd ~
+    git clone https://github.com/xArm-Developer/xArm-Python-SDK.git
+    python3 setup.py install
+    ```
+
+- Clone the BestMan_Xarm Repository
+
+    ```bash
+    git clone https://github.com/yding25/BestMan_Xarm.git
+    ```
+
+
 
 ## 🔎 Project Structure
 
 Generate and view the project structure:
 ```
 doxygen Doxyfile
-firefox /home/$(whoami)/BestMan_Flexiv/docs/html/index.html
+firefox /home/$(whoami)/BestMan_Xarm/docs/html/index.html
 ```
 
 ## 👨‍💻 Basic Demos
-:shamrock: **Load Kitchens**
 
-```
-python /home/$(whoami)/BestMan_Flexiv/Examples/open_gripper.py 192.168.2.100 192.168.2.108 20
+
+```bash
+cd ~/BestMan_Xarm/Examples/
+python3 move_arm_to_home.py 192.168.1.208
 ```
 
 ## 📧 Contact Information
