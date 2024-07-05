@@ -1,4 +1,5 @@
-<img src="docs/BestMan_logo.png" alt="BestMan Logo" width="700"/>
+# BestMan_Xarm
+<!-- <img src="docs/BestMan_logo.png" alt="BestMan Logo" width="700"/> -->
 
 <!-- # BestMan_Flexiv - A Pybullet-based Mobile Manipulator Simulator -->
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/facebookresearch/home-robot/blob/main/LICENSE)
@@ -9,7 +10,9 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat)](https://timothycrosley.github.io/isort/) -->
 
-Welcome to the BestMan_Flexiv repository, a codebase dedicated to the Flexiv robotic arm.
+Welcome to the BestMan_Xarm repository, a codebase dedicated to the XArm 6 robotic arm.
+
+README TO BE UPDATE!
 
 ## 💻 Installation
 
@@ -20,9 +23,6 @@ cd /home/$(whoami)
 git clone https://github.com/yding25/BestMan_Flexiv.git
 ```
 
-<!-- - Integrate with flexiv_rdk 
-Ensure you have flexiv_rdk version 0.10. You can download it from [Flexiv Robotics GitHub](https://github.com/flexivrobotics/flexiv_rdk.git) or the [Flexiv RDK](https://rdk.flexiv.com/manual/getting_started.html#setup-and-run-python-rdk) Manual. -->
-
 - Create conda environment
 
 ```
@@ -31,6 +31,7 @@ conda env create -f basic_environment.yaml
 ```
 
 ## 🔎 Project Structure
+
 Generate and view the project structure:
 ```
 doxygen Doxyfile
@@ -49,8 +50,8 @@ python /home/$(whoami)/BestMan_Flexiv/Examples/open_gripper.py 192.168.2.100 192
 If you have any questions or need further assistance, please feel free to reach out via email:
 - dingyan at pjlab.org.cn
 - zhaxizhuoma at pjlab.org.cn
-
+- wuziniu at pjlab.org.cn
 
 ##  :handshake: Reference
 - [IKPy’s documentation](https://ikpy.readthedocs.io/en/latest/index.html)
-- [Flexiv RDK APIs](https://rdk.flexiv.cn/api/index.html)
+- [xArm-Python-SDK ](https://github.com/xArm-Developer/xArm-Python-SDK)
