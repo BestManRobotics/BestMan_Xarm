@@ -26,15 +26,15 @@ from xarm.wrapper import XArmAPI
 class Bestman_Real_Xarm6:
     def __init__(self, robot_ip, local_ip, frequency):
         # Initialize the robot and gripper with the provided IPs and frequency
-        ip = '192.168.1.208'
-        self.robot = XArmAPI(ip)
-
+        # robot_ip = '192.168.1.208'
+        self.robot = XArmAPI(robot_ip)
+        local_ip = None
         self.mode = self.robot.set_mode(0) # 0: default
         self.robot_states = self.robot.set_state(0)
 
         # self.robot = flexivrdk.Robot(robot_ip, local_ip)
         # self.gripper = None
-        # self.frequency = frequency
+        self.frequency = frequency
         # self.log = flexivrdk.Log()
         # self.mode = flexivrdk.Mode
         # self.robot_states = flexivrdk.RobotStates()
@@ -88,7 +88,8 @@ class Bestman_Real_Xarm6:
         '''Move arm to initial pose.'''
         self.robot.set_mode(0) # 0: default
         self.robot.set_state(0)
-        self.robot.set_position(x=205, y=-1.9,z=275.1,roll=-180,pitch=0,yaw=0)
+        # self.robot.set_position(x=396.4, y=-1.7,z=285.5,roll=-90,pitch=-90,yaw=-90,wait=True)
+        self.robot.set_position(x=470.3, y=-1.5,z=359.6,roll=180,pitch=0,yaw=0,wait=True)
         # self.robot.setMode(self.mode.NRT_PRIMITIVE_EXECUTION)
         # self.robot.executePrimitive("Home()")
 
@@ -242,7 +243,7 @@ class Bestman_Real_Xarm6:
 
         return pose
 
-    def move_arm_to_joint_angles(self, joint_angles, target_vel=None, target_acc=None, MAX_VEL=None, MAX_ACC=None):
+    def move_arm_to_joint_angles(self, joint_angles, target_vel=None, target_acc=None, MAX_VEL=None, MAX_ACC=None, wait_for_finish=None):
         '''
         Move arm to a specific set of joint angles, considering physics.
 
@@ -257,7 +258,7 @@ class Bestman_Real_Xarm6:
         self.robot.set_mode(6) # 0: joint control mode; 6: online joint
         self.robot.set_state(0)
 
-        self.robot.set_servo_angle(angle=joint_angles, is_radian=True, speed=0.3, wait=False) # speed in rad/s
+        self.robot.set_servo_angle(angle=joint_angles, is_radian=True, speed=0.3, wait=wait_for_finish) # speed in rad/s
         # self.robot.setMode(self.mode.NRT_JOINT_POSITION)
         # self.update_robot_states()
         # DOF = len(self.robot_states.q)
