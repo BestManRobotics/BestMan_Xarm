@@ -48,7 +48,6 @@ firefox /home/$(whoami)/BestMan_Xarm/docs/html/index.html # API document
 
 ## 👨‍💻 Basic Demos
 
-
 ```bash
 cd ~/BestMan_Xarm/Examples/
 # Demo: Go Home
@@ -56,6 +55,11 @@ python3 move_arm_to_home.py 192.168.1.208
 
 # Demo: Move Joints
 python3 move_arm_to_joint_angles.py 192.168.1.208
+
+# Demo: Move gripper
+python3 close_gripper.py 192.168.1.208
+python3 open_gripper.py 192.168.1.208
+python3 open_gripper_width.py 192.168.1.208
 ```
 
 (We are fixing other demos.)

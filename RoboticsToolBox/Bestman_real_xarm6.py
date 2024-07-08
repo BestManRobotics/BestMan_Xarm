@@ -33,7 +33,7 @@ class Bestman_Real_Xarm6:
         self.robot_states = self.robot.set_state(0)
 
         # self.robot = flexivrdk.Robot(robot_ip, local_ip)
-        # self.gripper = None
+        self.gripper = True # have gripper by default
         self.frequency = frequency
         # self.log = flexivrdk.Log()
         # self.mode = flexivrdk.Mode
@@ -90,8 +90,7 @@ class Bestman_Real_Xarm6:
         self.robot.set_state(0)
         # self.robot.set_position(x=396.4, y=-1.7,z=285.5,roll=-90,pitch=-90,yaw=-90,wait=True)
         self.robot.set_position(x=470.3, y=-1.5,z=359.6,roll=180,pitch=0,yaw=0,wait=True)
-        # self.robot.setMode(self.mode.NRT_PRIMITIVE_EXECUTION)
-        # self.robot.executePrimitive("Home()")
+
 
     def pose_to_euler(self, pose):
         '''
@@ -212,7 +211,7 @@ class Bestman_Real_Xarm6:
         '''
         _joint_states = self.robot.get_joint_states(is_radian=True)
         _joint_angles = _joint_states[1][0][0:6]
-        # _joint_velocities = _joint_states[1][1][0:6]
+
         return _joint_angles
     
     def get_current_joint_velocities(self):
@@ -222,11 +221,13 @@ class Bestman_Real_Xarm6:
         Returns:
             list: A list of the current joint velocities of the robot arm.
         '''
+
         _joint_states = self.robot.get_joint_states(is_radian=True)
-        # _joint_angles = _joint_states[1][0][0:6]
         _joint_velocities = _joint_states[1][1][0:6]
+
         return _joint_velocities
     
+    # TODO add a parameter to control unit
     def get_current_end_effector_pose(self):
         '''
         Retrieves the current pose of the robot arm's end effector.
@@ -234,14 +235,12 @@ class Bestman_Real_Xarm6:
         This function obtains the position and orientation of the end effector.
 
         Returns:
-            pose: the [x, y, z, roll, pitch, yaw] value of tcp
+            pose: the [x, y, z, roll, pitch, yaw] value of tcp in mm and degree
         '''
 
-        self.update_robot_states()
-        pose = self.robot_states.tcpPose
-        pose = self.pose_to_euler(pose)
+        pose = self.robot.get_position()
 
-        return pose
+        return pose[1]
 
     def move_arm_to_joint_angles(self, joint_angles, target_vel=None, target_acc=None, MAX_VEL=None, MAX_ACC=None, wait_for_finish=None):
         '''
@@ -259,22 +258,8 @@ class Bestman_Real_Xarm6:
         self.robot.set_state(0)
 
         self.robot.set_servo_angle(angle=joint_angles, is_radian=True, speed=0.3, wait=wait_for_finish) # speed in rad/s
-        # self.robot.setMode(self.mode.NRT_JOINT_POSITION)
-        # self.update_robot_states()
-        # DOF = len(self.robot_states.q)
-        # # Set default values if not provided
-        # if target_vel is None:
-        #     target_vel = [0.0] * DOF
-        # if target_acc is None:
-        #     target_acc = [0.0] * DOF
-        # if MAX_VEL is None:
-        #     MAX_VEL = [1.0] * DOF
-        # if MAX_ACC is None:
-        #     MAX_ACC = [0.5] * DOF
-        
-        # self.robot.sendJointPosition(joint_angles, target_vel, target_acc, MAX_VEL, MAX_ACC)
 
-
+    # TODO
     def move_arm_follow_joint_angles(self, target_trajectory, target_vel=None, target_acc=None, MAX_VEL=None, MAX_ACC=None):
         '''
         Move arm to a few set of joint angles, considering physics.
@@ -315,6 +300,7 @@ class Bestman_Real_Xarm6:
     # Functions for end effector
     # ----------------------------------------------------------------
 
+    # TODO
     def move_end_effector_to_goal_pose(self, end_effector_goal_pose, max_linear_vel=0.5, max_angular_vel=1.0):
         '''
         Move arm's end effector to a target position.
@@ -329,6 +315,7 @@ class Bestman_Real_Xarm6:
         self.robot.setMode(self.mode.NRT_CARTESIAN_MOTION_FORCE)
         self.robot.sendCartesianMotionForce(end_effector_goal_pose_que, wrench, max_linear_vel, max_angular_vel)
 
+    # TODO
     def move_end_effector_to_goal_pose_wrench(self, end_effector_goal_pose, wrench, max_linear_vel=0.5, max_angular_vel=1.0, contact_wrench=None, pressing_force_threshold=10.0):
         '''
         Move arm's end effector to a target position.
@@ -349,7 +336,7 @@ class Bestman_Real_Xarm6:
 
         self.robot.sendCartesianMotionForce(end_effector_goal_pose_que, wrench, max_linear_vel, max_angular_vel)
 
-
+    # TODO
     def move_end_effector_follow_trajectory(self, targets, max_linear_vel=0.5, max_angular_vel=1.0):
         '''
         Move arm's end effector to a target position.
@@ -382,7 +369,8 @@ class Bestman_Real_Xarm6:
             end_effector_goal_position: The desired pose of the end effector (includes both position and orientation).
         '''
         pass
-
+    
+    # TODO
     def rotate_end_effector_tcp(self, axis, angle):
         '''
         Rotate the end effector of the robot arm by a specified angle by euler.
@@ -405,7 +393,7 @@ class Bestman_Real_Xarm6:
         self.robot.setMode(self.mode.NRT_CARTESIAN_MOTION_FORCE_BASE)
         self.robot.sendCartesianMotionForce(new_pose)
 
-
+    # TODO
     def rotate_end_effector_joint(self, angle):
         '''
         Rotate the end effector of the robot arm by a specified angle by joint.
@@ -429,7 +417,7 @@ class Bestman_Real_Xarm6:
     # ----------------------------------------------------------------
     # Functions for IK
     # ----------------------------------------------------------------
-
+    # TODO
     def joints_to_cartesian(self, joint_angles):
         '''
         Transforms the robot arm's joint angles to its Cartesian coordinates.
@@ -465,7 +453,7 @@ class Bestman_Real_Xarm6:
 
         return position, orientation
     
-    
+    # TODO
     def cartesian_to_joints(self, position, orientation):
         '''
         Transforms the robot arm's Cartesian coordinates to its joint angles.
@@ -496,7 +484,7 @@ class Bestman_Real_Xarm6:
 
         return joint_angles[1:8]
 
-
+    # TODO
     def calculate_IK_error(self, goal_position, goal_orientation):
         '''
         Calculate the inverse kinematics (IK) error for performing pick-and-place manipulation of an object using a robot arm.
@@ -518,73 +506,51 @@ class Bestman_Real_Xarm6:
         Returns:
             str: The serial port where the gripper is connected, or None if not found.
         '''
-        ports = [f'/dev/ttyS{i}' for i in range(2)] + [f'/dev/ttyUSB{i}' for i in range(2)]
-        
-        for port in ports:
-            try:
-                print(f"Trying port: {port}")
-                ser = serial.Serial(port, baudrate=115200, timeout=1.0)
-                device = mm.Instrument(ser, 9, mode=mm.MODE_RTU)
-                print(f"Connected to {port}")
-                device.write_registers(1000, [0, 100, 0])
-                registers = device.read_registers(2000, 3, 4)
-                posRequestEchoReg3 = registers[1] & 0b0000000011111111
+        _pos = self.robot.get_gripper_position()
+        _ver = self.robot.get_gripper_version
 
-                if posRequestEchoReg3 == 100:
-                    print(f"Gripper found on port: {port}")
-                    ser.close()
-                    return port
-                
-                ser.close()
-            except Exception as e:
-                print(f"Port {port} is not the gripper: {e}")
-        
-        return None
+        if _ver is not None and _pos is not None:
+            print("Have Xarm gripper", _ver)
+            return True
+        else:
+            print("Not found Xarm gripper")
+            return None
     
     def connect_gripper(self):
         '''
         Activates and controls the gripper to go to a specific position with given speed and force.
         '''
-        gripper_port = self.find_gripper()
-        if gripper_port:
-            try:
-                self.gripper = pyRobotiqGripper.RobotiqGripper(portname=gripper_port)
-                print(f"Connected to gripper on port {self.gripper.portname}.")
-                
-                # print(self.gripper.isActivated())
-                
-                if not self.gripper.isActivated():
-                    # Activate the gripper if it is not already activated
-                    print("Activating gripper...")
-                    self.gripper.activate()
-            except Exception as e:
-                print(f"Unexpected error: {e}")
-        else:
-            print("No gripper detected.")
+        print("This method is not applicable for XARM. Return None")
+        return None
+   
     
     def gripper_goto(self, value, speed=255, force=255):
         '''
-        Moves the gripper to a specified position with given speed and force.
+        Moves the gripper to a specified position with given speed.
 
         Args:
-            value (int): Position of the gripper. Integer between 0 and 255.
+            value (int): Position of the gripper. Integer between 0 and 850.
                         0 represents the open position, and 255 represents the closed position.
-            speed (int): Speed of the gripper movement, between 0 and 255.
-            force (int): Force applied by the gripper, between 0 and 255.
+            speed (int): Speed of the gripper movement, between 0 and 8000.
+            force (int): Not applicable for xarm gripper
         
         Note:
-            - 255 means fully closed.
-            - 0 means fully open.
+            - 0 means fully closed.
+            - 850 means fully open.
         '''
         if self.gripper:
-            self.gripper.goTo(position=value, speed=speed, force=force)
+            print("Controlling gripper!")
+            self.robot.set_gripper_mode(0)
+            self.robot.set_gripper_enable(True)
+            self.robot.set_gripper_speed(8000)
+            self.robot.set_gripper_position(pos=value, wait=True, speed=speed)
         else:
             print("Gripper not connected. Please call connect_gripper() first.")
 
     def open_gripper(self):
         ''' Opens the gripper to its maximum position with maximum speed and force. '''
-        self.gripper_goto(value=0, speed=255, force=255)
+        self.gripper_goto(value=850, speed=8000, force=None)
 
     def close_gripper(self):
         '''Closes the gripper to its minimum position with maximum speed and force.'''
-        self.gripper_goto(value=255, speed=255, force=255)
+        self.gripper_goto(value=0, speed=8000, force=None)

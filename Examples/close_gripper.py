@@ -1,81 +1,51 @@
 '''
 Run this script using:
-python /home/$(whoami)/BestMan_Flexiv/Examples/close_gripper.py 192.168.2.100 192.168.2.108 20
+
+python3 close_gripper.py 192.168.1.208
 '''
 
 import sys
 import os
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(os.path.join(parent_dir, 'RoboticsToolBox'))
-import pyRobotiqGripper
-from Bestman_sim_flexiv import *
-
+# import pyRobotiqGripper
+from Bestman_real_xarm6 import *
+from time import time, sleep
+import numpy as np
 def main():
     # Parse Arguments
-    argparser = argparse.ArgumentParser()
+    argparser = argparse.ArgumentParser(description="Xarm6.")
     # Required arguments
-    argparser.add_argument("robot_ip", help="IP address of the robot server (default: 192.168.2.100)")
-    argparser.add_argument("local_ip", help="IP address of this PC")
-    argparser.add_argument(
-        "frequency", help="command frequency, 1 to 200 [Hz]", type=int)
+    argparser.add_argument("robot_ip", help="IP address of the robot server")
+    # argparser.add_argument("local_ip", help="IP address of this PC")
+    # argparser.add_argument("frequency", type=int, help="Command frequency, 1 to 200 [Hz]")
     # Optional arguments
-    argparser.add_argument(
-        "--hold", action="store_true",
-        help="robot holds current joint positions, otherwise do a sine-sweep")
+    # argparser.add_argument("--hold", action="store_true", help="Robot holds current joint positions, otherwise do a sine-sweep")
     args = argparser.parse_args()
 
-    # Check if arguments are valid
-    frequency = args.frequency
-    assert (frequency >= 1 and frequency <= 200), "Invalid <frequency> input"
-
-    # Initialize logging
-    log = flexivrdk.Log()
-
     try:
-        '''
-        RDK Initialization
-        '''
-        # Instantiate robot interface
-        bestman = Bestman_Real_Flexiv(args.robot_ip, args.local_ip, args.frequency)
-        
-        # Clear fault on robot server if any
-        if bestman.robot.isFault():
-            log.warn("Fault occurred on robot server, trying to clear ...")
-            bestman.robot.clearFault()
-            time.sleep(1)
-            if bestman.robot.isFault():
-                log.error("Fault cannot be cleared, exiting ...")
-                return
-            log.info("Fault on robot server is cleared")
-        
-        # Enable the robot
-        log.info("Enabling robot ...")
-        bestman.robot.enable()
-        
-        # Wait for the robot to become operational
-        seconds_waited = 0
-        while not bestman.robot.isOperational():
-            time.sleep(1)
-            seconds_waited += 1
-            if seconds_waited == 10:
-                log.warn(
-                    "Still waiting for robot to become operational, please "
-                    "check that the robot 1) has no fault, 2) is booted "
-                    "into Auto mode")
-        log.info("Robot is now operational")
+        # Instantiate the robot interface
+        bestman = Bestman_Real_Xarm6(args.robot_ip, None, None)
 
-        # wait until the action is done
-        while (parse_pt_states(bestman.robot.getPrimitiveStates(), "reachedTarget") != "1"):
-            time.sleep(1)
+        # Clear fault on the robot server if any
+        # if bestman.robot.isFault():
+        #     log.warn("Fault occurred on the robot server, trying to clear ...")
+        #     bestman.robot.clearFault()
+        #     time.sleep(2)
+        #     if bestman.robot.isFault():
+        #         log.error("Fault cannot be cleared, exiting ...")
+        #         return
+        #     log.info("Fault on the robot server is cleared")
 
-        # Connect and open the gripper
-        bestman.connect_gripper()
-        time.sleep(1)
+        # Close gripper
+        bestman.find_gripper()
         bestman.close_gripper()
+        print(bestman.get_current_end_effector_pose())
+
 
     except Exception as e:
         # Log any exceptions that occur
-        log.error(str(e))
+        print(str(e))
 
 
 if __name__ == "__main__":
