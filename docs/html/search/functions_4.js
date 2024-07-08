@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['joints_5fto_5fcartesian_72',['joints_to_cartesian',['../classBestman__sim__flexiv_1_1Bestman__Real__Flexiv.html#a4abbb805911dd6a6868f6e5ef1072bcd',1,'Bestman_sim_flexiv::Bestman_Real_Flexiv']]]
+  ['joints_5fto_5fcartesian_70',['joints_to_cartesian',['../classBestman__real__xarm6_1_1Bestman__Real__Xarm6.html#a39ee38b6d9d2526a75eb735ffa855152',1,'Bestman_real_xarm6::Bestman_Real_Xarm6']]]
 ];

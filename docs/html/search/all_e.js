@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['update_5frobot_5fstates_42',['update_robot_states',['../classBestman__sim__flexiv_1_1Bestman__Real__Flexiv.html#a681f10e2e4306c44056f79c76cf63c5b',1,'Bestman_sim_flexiv::Bestman_Real_Flexiv']]],
-  ['utility_43',['utility',['../namespaceutility.html',1,'']]]
+  ['update_5frobot_5fstates_41',['update_robot_states',['../classBestman__real__xarm6_1_1Bestman__Real__Xarm6.html#a8e483551cb35ee77bcc0e47abcb10823',1,'Bestman_real_xarm6::Bestman_Real_Xarm6']]],
+  ['utility_42',['utility',['../namespaceutility.html',1,'']]]
 ];
