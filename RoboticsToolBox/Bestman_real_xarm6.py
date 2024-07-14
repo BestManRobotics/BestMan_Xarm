@@ -31,7 +31,7 @@ class Bestman_Real_Xarm6:
         local_ip = None
         self.mode = self.robot.set_mode(0) # 0: default
         self.robot_states = self.robot.set_state(0)
-
+        self.first_init_flag = True
         # self.robot = flexivrdk.Robot(robot_ip, local_ip)
         self.gripper = True # have gripper by default
         self.frequency = frequency
@@ -84,13 +84,13 @@ class Bestman_Real_Xarm6:
     def set_mode(self, _mode):
         print("set mode")
 
-    def go_home(self):
+    def go_home(self,dist):
         '''Move arm to initial pose.'''
         self.robot.set_mode(0) # 0: default
         self.robot.set_state(0)
         # self.robot.set_position(x=396.4, y=-1.7,z=285.5,roll=-90,pitch=-90,yaw=-90,wait=True)
-        self.robot.set_position(x=470.3, y=-1.5,z=359.6,roll=180,pitch=0,yaw=0,wait=True)
-
+        #self.robot.set_position(x=470.3, y=-1.5,z=359.6,roll=180,pitch=0,yaw=0,wait=True)
+        self.robot.set_position(x=396.4+dist, y=-5.5,z=360,roll=-90,pitch=-90,yaw=-90,wait=True)
 
     def pose_to_euler(self, pose):
         '''
@@ -253,11 +253,13 @@ class Bestman_Real_Xarm6:
             MAX_VEL: Optional. A list of maximum velocities for each joint.
             MAX_ACC: Optional. A list of maximum accelerations for each joint.
         '''
+        if self.first_init_flag == True:
+            self.robot.set_mode(6) # 0: joint control mode; 6: online joint
+            self.robot.set_state(0)
+            self.first_init_flag = False
         
-        self.robot.set_mode(6) # 0: joint control mode; 6: online joint
-        self.robot.set_state(0)
 
-        self.robot.set_servo_angle(angle=joint_angles, is_radian=True, speed=0.3, wait=wait_for_finish) # speed in rad/s
+        self.robot.set_servo_angle(angle=joint_angles, is_radian=True, speed=0.7, wait=wait_for_finish) # speed in rad/s
 
     # TODO
     def move_arm_follow_joint_angles(self, target_trajectory, target_vel=None, target_acc=None, MAX_VEL=None, MAX_ACC=None):
