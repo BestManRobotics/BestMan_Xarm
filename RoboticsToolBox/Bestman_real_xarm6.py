@@ -253,13 +253,18 @@ class Bestman_Real_Xarm6:
             MAX_VEL: Optional. A list of maximum velocities for each joint.
             MAX_ACC: Optional. A list of maximum accelerations for each joint.
         '''
-        if self.first_init_flag == True:
-            self.robot.set_mode(6) # 0: joint control mode; 6: online joint
-            self.robot.set_state(0)
-            self.first_init_flag = False
-        
 
-        self.robot.set_servo_angle(angle=joint_angles, is_radian=True, speed=0.7, wait=wait_for_finish) # speed in rad/s
+        # safe mode switch
+        # if self.first_init_flag == True:
+        #     self.robot.set_mode(6) # 0: joint control mode; 6: online joint
+        #     self.robot.set_state(0)
+        #     self.first_init_flag = False
+
+        #! Force mode switch
+        self.robot.set_mode(6) # 0: joint control mode; 6: online joint
+        self.robot.set_state(0)
+
+        self.robot.set_servo_angle(angle=joint_angles, is_radian=True, speed=1, wait=wait_for_finish) # speed in rad/s
 
     # TODO
     def move_arm_follow_joint_angles(self, target_trajectory, target_vel=None, target_acc=None, MAX_VEL=None, MAX_ACC=None):
