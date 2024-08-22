@@ -551,7 +551,7 @@ class Bestman_Real_Xarm6:
             - 0 means fully closed.
             - 800 means fully open.
         '''
-        self.robot.set_gripper_position(pos=value, speed=speed, wait=True)
+        self.robot.set_gripper_position(pos=value, speed=speed, wait=False, timeout=1, auto_enable=True)
 
     def open_gripper(self):
         ''' Opens the gripper to its maximum position with maximum speed and force. '''
