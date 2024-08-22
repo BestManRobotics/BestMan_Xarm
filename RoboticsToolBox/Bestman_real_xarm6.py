@@ -264,7 +264,7 @@ class Bestman_Real_Xarm6:
         self.robot.set_mode(6) # 0: joint control mode; 6: online joint
         self.robot.set_state(0)
 
-        self.robot.set_servo_angle(angle=joint_angles, is_radian=True, speed=1, wait=wait_for_finish) # speed in rad/s
+        self.robot.set_servo_angle(angle=joint_angles, is_radian=True, speed=0.7, wait=wait_for_finish) # speed in rad/s
 
     # TODO
     def move_arm_follow_joint_angles(self, target_trajectory, target_vel=None, target_acc=None, MAX_VEL=None, MAX_ACC=None):
@@ -522,7 +522,13 @@ class Bestman_Real_Xarm6:
         else:
             print("Not found Xarm gripper")
             return None
-    
+        
+    def get_gripper_pos(self):
+
+        gripper_pos = self.robot.get_gripper_position()
+
+        return gripper_pos[1]
+  
     def connect_gripper(self):
         '''
         Activates and controls the gripper to go to a specific position with given speed and force.
@@ -531,28 +537,21 @@ class Bestman_Real_Xarm6:
         return None
    
     
-    def gripper_goto(self, value, speed=255, force=255):
+    def gripper_goto(self, value, speed=5000, force=None):
         '''
         Moves the gripper to a specified position with given speed.
 
         Args:
-            value (int): Position of the gripper. Integer between 0 and 850.
+            value (int): Position of the gripper. Integer between 0 and 800.
                         0 represents the open position, and 255 represents the closed position.
             speed (int): Speed of the gripper movement, between 0 and 8000.
             force (int): Not applicable for xarm gripper
         
         Note:
             - 0 means fully closed.
-            - 850 means fully open.
+            - 800 means fully open.
         '''
-        if self.gripper:
-            print("Controlling gripper!")
-            self.robot.set_gripper_mode(0)
-            self.robot.set_gripper_enable(True)
-            self.robot.set_gripper_speed(8000)
-            self.robot.set_gripper_position(pos=value, wait=True, speed=speed)
-        else:
-            print("Gripper not connected. Please call connect_gripper() first.")
+        self.robot.set_gripper_position(pos=value, speed=speed, wait=True)
 
     def open_gripper(self):
         ''' Opens the gripper to its maximum position with maximum speed and force. '''
