@@ -514,7 +514,7 @@ class Bestman_Real_Xarm6:
             str: The serial port where the gripper is connected, or None if not found.
         '''
         _pos = self.robot.get_gripper_position()
-        _ver = self.robot.get_gripper_version
+        _ver = self.robot.get_gripper_version()
 
         if _ver is not None and _pos is not None:
             print("Have Xarm gripper", _ver)
@@ -523,8 +523,10 @@ class Bestman_Real_Xarm6:
             print("Not found Xarm gripper")
             return None
         
-    def get_gripper_pos(self):
-
+    def get_gripper_position(self):
+        '''
+        Get the position of the XArm gripper.
+        '''
         gripper_pos = self.robot.get_gripper_position()
 
         return gripper_pos[1]
@@ -555,8 +557,8 @@ class Bestman_Real_Xarm6:
 
     def open_gripper(self):
         ''' Opens the gripper to its maximum position with maximum speed and force. '''
-        self.gripper_goto(value=850, speed=8000, force=None)
+        self.gripper_goto(value=850, speed=5000, force=None)
 
     def close_gripper(self):
         '''Closes the gripper to its minimum position with maximum speed and force.'''
-        self.gripper_goto(value=0, speed=8000, force=None)
+        self.gripper_goto(value=0, speed=5000, force=None)
