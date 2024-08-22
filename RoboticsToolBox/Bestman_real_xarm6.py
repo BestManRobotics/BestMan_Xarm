@@ -238,9 +238,9 @@ class Bestman_Real_Xarm6:
             pose: the [x, y, z, roll, pitch, yaw] value of tcp in mm and degree
         '''
 
-        pose = self.robot.get_position()
+        _pose = self.robot.get_position()
 
-        return pose[1]
+        return _pose[1]
 
     def move_arm_to_joint_angles(self, joint_angles, target_vel=None, target_acc=None, MAX_VEL=None, MAX_ACC=None, wait_for_finish=None):
         '''
