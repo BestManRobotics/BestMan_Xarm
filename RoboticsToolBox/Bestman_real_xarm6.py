@@ -32,7 +32,6 @@ class Bestman_Real_Xarm6:
         self.mode = self.robot.set_mode(0) # 0: default
         self.robot_states = self.robot.set_state(0)
         self.first_init_flag = True
-        # self.robot = flexivrdk.Robot(robot_ip, local_ip)
         self.gripper = True # have gripper by default
         self.frequency = frequency
         # self.log = flexivrdk.Log()
