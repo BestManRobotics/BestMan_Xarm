@@ -1,53 +1,53 @@
-'''
-Run this script using:
+# !/usr/bin/env python
+# -*- encoding: utf-8 -*-
+"""
+# @FileName       : move_arm_to_home.py
+# @Time           : 2024-12-01 15:21:45
+# @Author         : Yan
+# @Email          : yding25@binghamton.edu
+# @Description    : Move arm to default home position
+# @Usage          : python move_arm_to_home.py 192.168.1.208 20
+"""
 
-python3 move_arm_to_home.py 192.168.1.208
-'''
+import argparse
+import time
+from Robotics_API import Bestman_Real_Flexiv
+import flexivrdk
 
-import sys
-import os
-parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-sys.path.append(os.path.join(parent_dir, 'RoboticsToolBox'))
-# import pyRobotiqGripper
-from Bestman_real_xarm6 import *
-from time import time, sleep
 
 def main():
     # Parse Arguments
-    argparser = argparse.ArgumentParser(description="Xarm6.")
+    argparser = argparse.ArgumentParser(
+        description="Move the robot arm to follow a trajectory."
+    )
     # Required arguments
     argparser.add_argument("robot_ip", help="IP address of the robot server")
-    # argparser.add_argument("local_ip", help="IP address of this PC")
-    # argparser.add_argument("frequency", type=int, help="Command frequency, 1 to 200 [Hz]")
-    # Optional arguments
-    # argparser.add_argument("--hold", action="store_true", help="Robot holds current joint positions, otherwise do a sine-sweep")
+    argparser.add_argument("local_ip", help="IP address of this PC")
+    argparser.add_argument("frequency", type=int, help="Command frequency, 1 to 200 [Hz]")
     args = argparser.parse_args()
+
+    # Validate the frequency argument
+    frequency = args.frequency
+    assert 1 <= frequency <= 200, "Invalid <frequency> input"
+
+    # Initialize logging
+    log = flexivrdk.Log()
 
     try:
         # Instantiate the robot interface
-        bestman = Bestman_Real_Xarm6(args.robot_ip, None, None)
+        bestman = Bestman_Real_Flexiv(args.robot_ip, args.local_ip, args.frequency)
 
-        # Clear fault on the robot server if any
-        # if bestman.robot.isFault():
-        #     log.warn("Fault occurred on the robot server, trying to clear ...")
-        #     bestman.robot.clearFault()
-        #     time.sleep(2)
-        #     if bestman.robot.isFault():
-        #         log.error("Fault cannot be cleared, exiting ...")
-        #         return
-        #     log.info("Fault on the robot server is cleared")
-
-        # Enable the robot, ensuring the E-stop is released before enabling
-        # log.info("Enabling robot ...")
-        # bestman.robot.enable()
+        # Initialize robot
+        if not bestman.initialize_robot():
+            return  # Exit if initialization fails
 
         # Go back to home pose
         bestman.go_home()
-        sleep(1)
+        time.sleep(10)
 
     except Exception as e:
         # Log any exceptions that occur
-        print(str(e))
+        log.error(str(e))
 
 
 if __name__ == "__main__":
