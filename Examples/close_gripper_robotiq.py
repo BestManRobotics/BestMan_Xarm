@@ -1,17 +1,17 @@
 # !/usr/bin/env python
 # -*- encoding: utf-8 -*-
 """
-# @FileName       : move_arm_to_home.py
+# @FileName       : open_gripper_robotiq.py
 # @Time           : 2024-12-01 15:21:45
 # @Author         : Zhaxi & Yan 
 # @Email          : zhaxizhuoma.ayang@gmail.com & yding25@binghamton.edu 
-# @Description    : Display arm state
-# @Usage          : python display_states.py 192.168.1.208
+# @Description    : Open robotiq gripper
+# @Usage          : python close_gripper_robotiq.py 192.168.1.208
 """
 
 import argparse
 import time
-from Robotics_API import Bestman_Real_Xarm6, Pose
+from Robotics_API import Bestman_Real_Xarm6
 
 def main():
     # Parse Arguments
@@ -29,8 +29,9 @@ def main():
         # Initialize robot
         if not bestman.initialize_robot():
             return  # Exit if initialization fails
-
-        bestman.update_robot_states()
+        
+        bestman.close_gripper_robotiq()
+        time.sleep(1)
 
     except Exception as e:
         # Log any exceptions that occur

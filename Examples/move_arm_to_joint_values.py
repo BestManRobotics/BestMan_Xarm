@@ -5,13 +5,13 @@
 # @Time           : 2024-12-01 15:21:45
 # @Author         : Zhaxi & Yan 
 # @Email          : zhaxizhuoma.ayang@gmail.com & yding25@binghamton.edu 
-# @Description    : Display arm state
-# @Usage          : python display_states.py 192.168.1.208
+# @Description    : Move arm to Move arm to targeted joint values
+# @Usage          : python move_arm_to_joint_values.py 192.168.1.208
 """
 
 import argparse
 import time
-from Robotics_API import Bestman_Real_Xarm6, Pose
+from Robotics_API import Bestman_Real_Xarm6
 
 def main():
     # Parse Arguments
@@ -30,7 +30,10 @@ def main():
         if not bestman.initialize_robot():
             return  # Exit if initialization fails
 
-        bestman.update_robot_states()
+        import math
+        target_joint = [16.8, -24.1, -24.7, 11.2, -77.7, -5.1]
+        target_joint = [math.radians(target_joint[n]) for n in range(6)]
+        bestman.move_arm_to_joint_values(target_joint)
 
     except Exception as e:
         # Log any exceptions that occur

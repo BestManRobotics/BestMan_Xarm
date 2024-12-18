@@ -1,4 +1,4 @@
-name: flexiv
+name: xarm
 channels:
   - defaults
 dependencies:

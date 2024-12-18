@@ -5,8 +5,8 @@
 # @Time           : 2024-12-01 15:21:45
 # @Author         : Zhaxi & Yan 
 # @Email          : zhaxizhuoma.ayang@gmail.com & yding25@binghamton.edu 
-# @Description    : Display arm state
-# @Usage          : python display_states.py 192.168.1.208
+# @Description    : Move end effector to targeted pose
+# @Usage          : python move_eef_to_pose.py 192.168.1.208
 """
 
 import argparse
@@ -30,7 +30,11 @@ def main():
         if not bestman.initialize_robot():
             return  # Exit if initialization fails
 
-        bestman.update_robot_states()
+        # Define the target trajectory
+        target_pose = Pose([0.420434235, -0.00581615, 0.459876038], [0.7071068218077394, -0.00032550013355177364, 0.7071065907288765, 0.0003255002399235735]) # 四元数
+
+        # Move the arm to follow the target trajectory
+        bestman.move_eef_to_goal_pose(target_pose)
 
     except Exception as e:
         # Log any exceptions that occur
