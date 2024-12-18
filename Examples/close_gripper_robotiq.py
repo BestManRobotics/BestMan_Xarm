@@ -1,11 +1,11 @@
 # !/usr/bin/env python
 # -*- encoding: utf-8 -*-
 """
-# @FileName       : open_gripper_robotiq.py
+# @FileName       : close_gripper_robotiq.py
 # @Time           : 2024-12-01 15:21:45
 # @Author         : Zhaxi & Yan 
 # @Email          : zhaxizhuoma.ayang@gmail.com & yding25@binghamton.edu 
-# @Description    : Open robotiq gripper
+# @Description    : Close robotiq gripper
 # @Usage          : python close_gripper_robotiq.py 192.168.1.208
 """
 

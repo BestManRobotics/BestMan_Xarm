@@ -15,26 +15,7 @@ Welcome to the BestMan_Xarm repository, a codebase dedicated to the XArm 6 robot
 
 ## 💻 Installation
 
-- (Optional) Create conda environment
-
-    ```
-    conda env create -f basic_environment.yaml
-    ```
-
-- Install xArm-Python-SDK
-
-    ```bash
-    cd ~
-    git clone https://github.com/xArm-Developer/xArm-Python-SDK.git
-    python3 setup.py install
-    ```
-
-- Clone the BestMan_Xarm Repository
-
-    ```bash
-    git clone https://github.com/yding25/BestMan_Xarm.git
-    ```
-
+We provide the installation guide [here](Install/install.md). You can install locally or use docker and verify the installation easily.
 
 
 ## 🔎 Project Structure
@@ -52,14 +33,6 @@ firefox /home/$(whoami)/BestMan_Xarm/docs/html/index.html # API document
 cd ~/BestMan_Xarm/Examples/
 # Demo: Go Home
 python3 move_arm_to_home.py 192.168.1.208
-
-# Demo: Move Joints
-python3 move_arm_to_joint_angles.py 192.168.1.208
-
-# Demo: Move gripper
-python3 close_gripper.py 192.168.1.208
-python3 open_gripper.py 192.168.1.208
-python3 open_gripper_width.py 192.168.1.208
 ```
 
 (We are fixing other demos.)

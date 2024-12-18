@@ -1,7 +1,7 @@
 # !/usr/bin/env python
 # -*- encoding: utf-8 -*-
 """
-# @FileName       : move_arm_to_home.py
+# @FileName       : move_arm_to_joint_values.py
 # @Time           : 2024-12-01 15:21:45
 # @Author         : Zhaxi & Yan 
 # @Email          : zhaxizhuoma.ayang@gmail.com & yding25@binghamton.edu 
