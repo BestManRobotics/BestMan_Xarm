@@ -50,30 +50,34 @@ class Bestman_Real_Xarm6:
         self.local_ip = local_ip
         self.frequency = frequency
         self.robot.set_mode(0)  # Default mode
+        self.robot.set_tgpio_modbus_baudrate(115200)
+        self.robot.set_tcp_load(1.917, [9.12, -2.28, 85.08])
+        self.robot.set_tcp_offset([0, 0, 318.1, 0, 0, 0])
+        self.robot.save_conf()
 
-        # Parse URDF for kinematic chain
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        urdf_file = os.path.join(current_dir, "../Asset/xarm6_robot.urdf")
-        if not os.path.exists(urdf_file):
-            raise FileNotFoundError(f"URDF file not found: {urdf_file}")
-        self.robot_chain = Chain.from_urdf_file(urdf_file, base_elements=["world"])  # Parse the URDF file and configure the kinematic chain
+        # # Parse URDF for kinematic chain
+        # current_dir = os.path.dirname(os.path.abspath(__file__))
+        # urdf_file = os.path.join(current_dir, "../Asset/xarm6_robot.urdf")
+        # if not os.path.exists(urdf_file):
+        #     raise FileNotFoundError(f"URDF file not found: {urdf_file}")
+        # self.robot_chain = Chain.from_urdf_file(urdf_file, base_elements=["world"])  # Parse the URDF file and configure the kinematic chain
 
-        # Define active links mask for xArm6 (Base + 6 DOF + End Effector)
-        active_links_mask = [False] + [False] + [True] * 6  # Adjust for 6-DOF robot
-        self.robot_chain.active_links_mask = active_links_mask
-        self.active_joints = [
-            joint
-            for joint in self.robot_chain.links
-            if isinstance(joint, URDFLink)
-            and (joint.joint_type == "revolute" or joint.joint_type == "prismatic")
-        ]
+        # # Define active links mask for xArm6 (Base + 6 DOF + End Effector)
+        # active_links_mask = [False] + [False] + [True] * 6  # Adjust for 6-DOF robot
+        # self.robot_chain.active_links_mask = active_links_mask
+        # self.active_joints = [
+        #     joint
+        #     for joint in self.robot_chain.links
+        #     if isinstance(joint, URDFLink)
+        #     and (joint.joint_type == "revolute" or joint.joint_type == "prismatic")
+        # ]
 
-        # Validate the number of active joints for xArm6
-        if len(self.active_joints) != 6:  # xArm6 is a 6-DOF robot
-            raise ValueError(
-                f"Expected 6 active joints, but found {len(self.active_joints)}. "
-                f"Check the URDF file and active_links_mask."
-            )
+        # # Validate the number of active joints for xArm6
+        # if len(self.active_joints) != 6:  # xArm6 is a 6-DOF robot
+        #     raise ValueError(
+        #         f"Expected 6 active joints, but found {len(self.active_joints)}. "
+        #         f"Check the URDF file and active_links_mask."
+            # )
 
         # Configure the logger (simplified setup)
         logging.basicConfig(
@@ -588,9 +592,9 @@ class Bestman_Real_Xarm6:
 
         # TCP Payload and offset
         # Robotiq 2F/85 Gripper
-        self.robot.set_tcp_load(0.925, [0, 0, 58])
-        self.robot.set_tcp_offset([0, 0, 174, 0, 0, 0])
-        self.robot.save_conf()
+        # self.robot.set_tcp_load(0.925, [0, 0, 58])
+        # self.robot.set_tcp_offset([0, 0, 174, 0, 0, 0])
+
 
         # Self-Collision Prevention Model
         # Robotiq 2F/85 Gripper

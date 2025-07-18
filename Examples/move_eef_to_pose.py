@@ -11,7 +11,8 @@
 
 import argparse
 import time
-from Robotics_API import Bestman_Real_Xarm6, Pose
+from Robotics_API import Bestman_Real_Xarm7, Pose
+import numpy as np
 
 def main():
     # Parse Arguments
@@ -24,17 +25,19 @@ def main():
 
     try:
         # Instantiate the robot interface
-        bestman = Bestman_Real_Xarm6(args.robot_ip)
+        bestman = Bestman_Real_Xarm7(args.robot_ip)
 
         # Initialize robot
         if not bestman.initialize_robot():
             return  # Exit if initialization fails
 
         # Define the target trajectory
-        target_pose = Pose([0.420434235, -0.00581615, 0.459876038], [0.7071068218077394, -0.00032550013355177364, 0.7071065907288765, 0.0003255002399235735]) # 四元数
+        angles_rad = np.radians([-84.09874516930229, -83.31184493346971, -98.6411015590766])
+        mvpose = Pose([0.5414959720000001, -0.0031613120000000003, 0.302334076], angles_rad)
+        # target_pose = Pose([0.420434235, -0.00581615, 0.459876038], [0.7071068218077394, -0.00032550013355177364, 0.7071065907288765, 0.0003255002399235735]) # 四元数
 
         # Move the arm to follow the target trajectory
-        bestman.move_eef_to_goal_pose(target_pose)
+        bestman.move_eef_to_goal_pose(mvpose)
 
     except Exception as e:
         # Log any exceptions that occur

@@ -11,7 +11,7 @@
 
 import argparse
 import time
-from Robotics_API import Bestman_Real_Xarm6, Pose
+from Robotics_API import Bestman_Real_Xarm7, Pose
 
 def main():
     # Parse Arguments
@@ -24,7 +24,7 @@ def main():
 
     try:
         # Instantiate the robot interface
-        bestman = Bestman_Real_Xarm6(args.robot_ip)
+        bestman = Bestman_Real_Xarm7(args.robot_ip)
 
         # Initialize robot
         if not bestman.initialize_robot():
