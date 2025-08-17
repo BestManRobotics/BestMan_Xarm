@@ -217,7 +217,7 @@ class Bestman_Real_Xarm6:
 
         self.robot.set_servo_angle(angle=joint_angles, is_radian=True, speed=0.7, wait=wait_for_finish) # speed in rad/s
 
-    def move_arm_follow_joint_angles(self, target_trajectory, target_vel=None, target_acc=None, MAX_VEL=None, MAX_ACC=None):
+    def move_arm_joint_angles_set(self, target_trajectory, target_vel=None, target_acc=None, MAX_VEL=None, MAX_ACC=None):
         '''
         Move arm to a few set of joint angles, considering physics.
 
@@ -249,7 +249,7 @@ class Bestman_Real_Xarm6:
     # ----------------------------------------------------------------
 
     # TODO
-    def get_current_tcp_speed(self):
+    def get_current_eef_speed(self):
         '''
         Retrieves the current tcp velocities of the robot arm.
 
@@ -260,7 +260,7 @@ class Bestman_Real_Xarm6:
         return speed
     
 
-    def get_current_end_effector_pose(self):
+    def get_current_eef_pose(self):
         '''
         Retrieves the current pose of the robot arm's end effector.
 
@@ -279,7 +279,7 @@ class Bestman_Real_Xarm6:
 
     
 
-    def move_end_effector_to_tcp_velocity(self, _velocity_setpoint, _duration):
+    def set_eef_velocity(self, _velocity_setpoint, _duration):
         '''
         Move arm's end effector to a target tcp velocity.
 
@@ -300,7 +300,7 @@ class Bestman_Real_Xarm6:
                                                     _velocity_setpoint[5]],
                                                     duration=_duration)
 
-    def move_end_effector_to_goal_pose(self, end_effector_goal_pose, speed=1000, mvacc=50000, wait=False):
+    def move_eef_to_goal_pose(self, end_effector_goal_pose, speed=1000, mvacc=50000, wait=False):
         '''
         Move arm's end effector to a target position.
 
