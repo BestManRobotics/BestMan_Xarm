@@ -18,9 +18,9 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 
 
 class Bestman_Real_Xarm6:
-    '''
-    Functions for initalization
-    '''
+    # ----------------------------------------------------------------
+    # Functions for initalization
+    # ----------------------------------------------------------------
 
     def __init__(self, robot_ip, local_ip, frequency):
         # Initialize the robot and gripper with the provided IPs and frequency
@@ -40,9 +40,9 @@ class Bestman_Real_Xarm6:
         #     if isinstance(joint, ikpy.link.URDFLink) and (joint.joint_type == 'revolute' or joint.joint_type == 'prismatic')
         # ]
 
-    '''
-    Functions for basic control
-    '''
+    # ----------------------------------------------------------------
+    # Functions for basic control
+    # ----------------------------------------------------------------
     def clear_fault(self):
         '''Clear fault, and updates the current robot states.'''
         self.robot.set_state(0)
@@ -69,7 +69,7 @@ class Bestman_Real_Xarm6:
         print("set mode")
         self.robot.set_mode(_mode)
 
-    def go_home(self,dist=0):
+    def move_to_home(self,dist=0):
         '''Move arm to initial pose.'''
 
         self.robot.set_position(x=396.4+dist, y=-5.5,z=360,roll=-90,pitch=-90,yaw=-90,wait=False)
@@ -105,7 +105,7 @@ class Bestman_Real_Xarm6:
         qx, qy, qz, qw = r.as_quat()  # Getting [qx, qy, qz, qw] from scipy
         return [x, y, z, qw, qx, qy, qz]  # Reordering to match [qw, qx, qy, qz]
     
-    def set_pay_load(self,payload_weight, payload_cog):
+    def set_payload(self,payload_weight, payload_cog):
 
         self.robot.set_tcp_load(payload_weight, payload_cog)
     
@@ -127,7 +127,7 @@ class Bestman_Real_Xarm6:
         return jointbounds
     
 
-    def get_DOF(self):
+    def get_dof(self):
         '''
         Retrieves the degree of freedom (DOF) of the robot arm.
 
@@ -145,7 +145,7 @@ class Bestman_Real_Xarm6:
         '''
         return list(range(len(self.active_joints)))
     
-    def get_tcp_link(self):
+    def get_links_info(self):
         '''
         Retrieves the TCP (Tool Center Point) link of the robot arm.
 
@@ -154,7 +154,7 @@ class Bestman_Real_Xarm6:
         '''
         return self.robot_chain.links[6].name
 
-    def get_current_joint_angles(self):
+    def get_joint_angles(self):
         '''
         Retrieves the current joint angles of the robot arm.
 
@@ -166,7 +166,7 @@ class Bestman_Real_Xarm6:
 
         return _joint_angles
     
-    def get_current_joint_velocities(self):
+    def get_joint_velocities(self):
         '''
         Retrieves the current joint velocities of the robot arm.
 
@@ -179,18 +179,7 @@ class Bestman_Real_Xarm6:
 
         return _joint_velocities
 
-    def get_current_eef_speed(self):
-        '''
-        Retrieves the current tcp velocities of the robot arm.
-
-        Returns:
-            list: A list of the current tcp velocities of the robot arm.
-        '''
-        speed = self.robot.realtime_tcp_speed
-        return speed
-    
-
-    def get_current_eef_pose(self):
+    def get_eef_pose(self):
         '''
         Retrieves the current pose of the robot arm's end effector.
 
@@ -205,14 +194,24 @@ class Bestman_Real_Xarm6:
         pose[0] = pose[0] / 1000
         pose[1] = pose[1] / 1000
         pose[2] = pose[2] / 1000
-        return pose
+        return pose   
+
+    def get_eef_velocities(self):
+        '''
+        Retrieves the current tcp velocities of the robot arm.
+
+        Returns:
+            list: A list of the current tcp velocities of the robot arm.
+        '''
+        speed = self.robot.realtime_tcp_speed
+        return speed
 
     
     # ----------------------------------------------------------------
     # Functions for joint control
     # ----------------------------------------------------------------
 
-    def print_joint_link_info(self, name):
+    def print_links_info(self, name):
         '''
         Prints the joint and link information of a robot.
 
@@ -228,7 +227,7 @@ class Bestman_Real_Xarm6:
             for i, link in enumerate(self.robot_chain.links[1:]):  # Assuming the arm starts from the second link
                 print(f"Link {i + 1}: {link.name}")
 
-    def move_arm_to_joint_angles(self, joint_angles, target_vel=None, target_acc=None, MAX_VEL=None, MAX_ACC=None, wait_for_finish=None):
+    def move_to_joint_angles(self, joint_angles, target_vel=None, target_acc=None, MAX_VEL=None, MAX_ACC=None, wait_for_finish=None):
         '''
         Move arm to a specific set of joint angles, considering physics.
 
@@ -244,7 +243,7 @@ class Bestman_Real_Xarm6:
 
         self.robot.set_servo_angle(angle=joint_angles, is_radian=True, speed=0.7, wait=wait_for_finish) # speed in rad/s
 
-    def move_arm_joint_angles_set(self, target_trajectory, target_vel=None, target_acc=None, MAX_VEL=None, MAX_ACC=None):
+    def move_to_joint_angles_trajectory(self, target_trajectory, target_vel=None, target_acc=None, MAX_VEL=None, MAX_ACC=None):
         '''
         Move arm to a few set of joint angles, considering physics.
 
@@ -298,7 +297,7 @@ class Bestman_Real_Xarm6:
                                                     _velocity_setpoint[5]],
                                                     duration=_duration)
 
-    def move_eef_to_goal_pose(self, end_effector_goal_pose, speed=1000, mvacc=50000, wait=False):
+    def move_to_eef_pose(self, end_effector_goal_pose, speed=1000, mvacc=50000, wait=False):
         '''
         Move arm's end effector to a target position.
 
@@ -311,7 +310,7 @@ class Bestman_Real_Xarm6:
 
 
 
-    def rotate_end_effector_joint(self, angle):
+    def rotate_eef_joint(self, angle):
         '''
         Rotate the end effector of the robot arm by a specified angle by joint.
 
@@ -332,7 +331,7 @@ class Bestman_Real_Xarm6:
     # Functions for IK/FK
     # ----------------------------------------------------------------
 
-    def joints_to_cartesian(self, joint_angles):
+    def forward_kinematics(self, joint_angles):
         '''
         Transforms the robot arm's joint angles to its Cartesian coordinates.
 
@@ -367,7 +366,7 @@ class Bestman_Real_Xarm6:
 
         return position, orientation
     
-    def cartesian_to_joints(self, position, orientation):
+    def inverse_kinematics(self, position, orientation):
         '''
         Transforms the robot arm's Cartesian coordinates to its joint angles.
 
@@ -398,7 +397,7 @@ class Bestman_Real_Xarm6:
         return joint_angles[1:8]
 
 
-    def calculate_IK_error(self, goal_position, goal_orientation):
+    def calculate_ik_error(self, goal_position, goal_orientation):
         '''
         Calculate the inverse kinematics (IK) error for performing pick-and-place manipulation of an object using a robot arm.
 
@@ -439,7 +438,7 @@ class Bestman_Real_Xarm6:
 
         return gripper_pos[1]
 
-    def gripper_goto_xarm(self, value, speed=5000, force=None):
+    def set_gripper_position_xarm(self, value, speed=5000, force=None):
         '''
         Moves the gripper to a specified position with given speed.
 
@@ -511,7 +510,7 @@ class Bestman_Real_Xarm6:
         gripper_width = status[1][-2]
         return gripper_width
 
-    def gripper_goto_robotiq(self, pos, speed=0xFF, force=0xFF, wait=False, timeout=5, **kwargs):
+    def set_gripper_position_robotiq(self, pos, speed=0xFF, force=0xFF, wait=False, timeout=5, **kwargs):
         """
         Go to the position with determined speed and force.
         
