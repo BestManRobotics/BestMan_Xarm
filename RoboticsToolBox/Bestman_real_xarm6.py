@@ -41,7 +41,7 @@ class Bestman_Real_Xarm6:
         # ]
 
     '''
-    Functions for xarm itself
+    Functions for basic control
     '''
     def clear_fault(self):
         '''Clear fault, and updates the current robot states.'''
@@ -111,7 +111,7 @@ class Bestman_Real_Xarm6:
     
 
     # ----------------------------------------------------------------
-    # Functions for others
+    # Functions for robot parameters acquisition
     # ----------------------------------------------------------------
 
     def get_joint_bounds(self):
@@ -135,26 +135,6 @@ class Bestman_Real_Xarm6:
             int: The degree of freedom of the robot arm.
         '''
         return 6
-    
-    # ----------------------------------------------------------------
-    # Functions for joint control
-    # ----------------------------------------------------------------
-
-    def print_joint_link_info(self, name):
-        '''
-        Prints the joint and link information of a robot.
-
-        Args:
-            name (str): 'base' or 'arm'
-        '''
-        if name == 'base':
-            print("Base joint and link information:")
-            for i, link in enumerate(self.robot_chain.links[:1]):  # Assuming the base is the first link
-                print(f"Link {i}: {link.name}")
-        elif name == 'arm':
-            print("Arm joint and link information:")
-            for i, link in enumerate(self.robot_chain.links[1:]):  # Assuming the arm starts from the second link
-                print(f"Link {i + 1}: {link.name}")
 
     def get_joint_idx(self):
         '''
@@ -198,8 +178,55 @@ class Bestman_Real_Xarm6:
         _joint_velocities = _joint_states[1][1][0:6]
 
         return _joint_velocities
+
+    def get_current_eef_speed(self):
+        '''
+        Retrieves the current tcp velocities of the robot arm.
+
+        Returns:
+            list: A list of the current tcp velocities of the robot arm.
+        '''
+        speed = self.robot.realtime_tcp_speed
+        return speed
     
+
+    def get_current_eef_pose(self):
+        '''
+        Retrieves the current pose of the robot arm's end effector.
+
+        This function obtains the position and orientation of the end effector.
+
+        Returns:
+            pose: the [x, y, z, roll, pitch, yaw] value of tcp in meter and radian
+        '''
+
+        _pose = self.robot.get_position(is_radian=True)
+        pose = _pose[1]
+        pose[0] = pose[0] / 1000
+        pose[1] = pose[1] / 1000
+        pose[2] = pose[2] / 1000
+        return pose
+
     
+    # ----------------------------------------------------------------
+    # Functions for joint control
+    # ----------------------------------------------------------------
+
+    def print_joint_link_info(self, name):
+        '''
+        Prints the joint and link information of a robot.
+
+        Args:
+            name (str): 'base' or 'arm'
+        '''
+        if name == 'base':
+            print("Base joint and link information:")
+            for i, link in enumerate(self.robot_chain.links[:1]):  # Assuming the base is the first link
+                print(f"Link {i}: {link.name}")
+        elif name == 'arm':
+            print("Arm joint and link information:")
+            for i, link in enumerate(self.robot_chain.links[1:]):  # Assuming the arm starts from the second link
+                print(f"Link {i + 1}: {link.name}")
 
     def move_arm_to_joint_angles(self, joint_angles, target_vel=None, target_acc=None, MAX_VEL=None, MAX_ACC=None, wait_for_finish=None):
         '''
@@ -245,39 +272,10 @@ class Bestman_Real_Xarm6:
             time.sleep(period)
 
     # ----------------------------------------------------------------
-    # Functions for end effector
+    # Functions for eef control
     # ----------------------------------------------------------------
 
     # TODO
-    def get_current_eef_speed(self):
-        '''
-        Retrieves the current tcp velocities of the robot arm.
-
-        Returns:
-            list: A list of the current tcp velocities of the robot arm.
-        '''
-        speed = self.robot.realtime_tcp_speed
-        return speed
-    
-
-    def get_current_eef_pose(self):
-        '''
-        Retrieves the current pose of the robot arm's end effector.
-
-        This function obtains the position and orientation of the end effector.
-
-        Returns:
-            pose: the [x, y, z, roll, pitch, yaw] value of tcp in meter and radian
-        '''
-
-        _pose = self.robot.get_position(is_radian=True)
-        pose = _pose[1]
-        pose[0] = pose[0] / 1000
-        pose[1] = pose[1] / 1000
-        pose[2] = pose[2] / 1000
-        return pose
-
-    
 
     def set_eef_velocity(self, _velocity_setpoint, _duration):
         '''
@@ -331,7 +329,7 @@ class Bestman_Real_Xarm6:
         self.robot.set_servo_angle(angle=target_joint_angles, is_radian=True, speed=target_vel, wait=False) # speed in rad/s
 
     # ----------------------------------------------------------------
-    # Functions for IK
+    # Functions for IK/FK
     # ----------------------------------------------------------------
 
     def joints_to_cartesian(self, joint_angles):
@@ -414,6 +412,8 @@ class Bestman_Real_Xarm6:
     # Functions for gripper
     # ----------------------------------------------------------------
     
+    ### xArm 
+    
     def find_gripper_xarm(self):
         '''
         Searches for the gripper on available serial ports and returns the port if found.
@@ -430,8 +430,41 @@ class Bestman_Real_Xarm6:
         else:
             print("Not found Xarm gripper")
             return None
-        
 
+    def get_gripper_position_xarm(self):
+        '''
+        Get the position of the XArm gripper.
+        '''
+        gripper_pos = self.robot.get_gripper_position()
+
+        return gripper_pos[1]
+
+    def gripper_goto_xarm(self, value, speed=5000, force=None):
+        '''
+        Moves the gripper to a specified position with given speed.
+
+        Args:
+            value (int): Position of the gripper. Integer between 0 and 800.
+                        0 represents the open position, and 255 represents the closed position.
+            speed (int): Speed of the gripper movement, between 0 and 8000.
+            force (int): Not applicable for xarm gripper
+        
+        Note:
+            - 0 means fully closed.
+            - 800 means fully open.
+        '''
+        self.robot.set_gripper_position(pos=value, speed=speed, wait=False, timeout=1, auto_enable=True)
+
+    def open_gripper_xarm(self):
+        ''' Opens the gripper to its maximum position with maximum speed and force. '''
+        self.gripper_goto(value=850, speed=5000, force=None)
+
+    def close_gripper_xarm(self):
+        '''Closes the gripper to its minimum position with maximum speed and force.'''
+        self.gripper_goto(value=0, speed=5000, force=None)
+    
+### Robotiq
+    
     def find_gripper_robotiq(self):
         """
         Config the parameter via Python SDK
@@ -454,13 +487,7 @@ class Bestman_Real_Xarm6:
         self.robot.robotiq_set_activate()    #enable the robotiq gripper
         
 
-    def get_gripper_position_xarm(self):
-        '''
-        Get the position of the XArm gripper.
-        '''
-        gripper_pos = self.robot.get_gripper_position()
 
-        return gripper_pos[1]
     
 
     def get_gripper_position_robotiq(self, number_of_registers=3):
@@ -483,25 +510,6 @@ class Bestman_Real_Xarm6:
         status = self.robot.robotiq_get_status(number_of_registers=number_of_registers)
         gripper_width = status[1][-2]
         return gripper_width
-  
-
-
-    def gripper_goto_xarm(self, value, speed=5000, force=None):
-        '''
-        Moves the gripper to a specified position with given speed.
-
-        Args:
-            value (int): Position of the gripper. Integer between 0 and 800.
-                        0 represents the open position, and 255 represents the closed position.
-            speed (int): Speed of the gripper movement, between 0 and 8000.
-            force (int): Not applicable for xarm gripper
-        
-        Note:
-            - 0 means fully closed.
-            - 800 means fully open.
-        '''
-        self.robot.set_gripper_position(pos=value, speed=speed, wait=False, timeout=1, auto_enable=True)
-    
 
     def gripper_goto_robotiq(self, pos, speed=0xFF, force=0xFF, wait=False, timeout=5, **kwargs):
         """
@@ -519,12 +527,6 @@ class Bestman_Real_Xarm6:
         """
         return self.robot.robotiq_set_position(pos, speed=speed, force=force, wait=wait, timeout=timeout, **kwargs)
     
-
-    def open_gripper_xarm(self):
-        ''' Opens the gripper to its maximum position with maximum speed and force. '''
-        self.gripper_goto(value=850, speed=5000, force=None)
-
-    
     def open_gripper_robotiq(self, speed=0xFF, force=0xFF, wait=False, timeout=5, **kwargs):
         """
         Open the robotiq gripper
@@ -539,12 +541,6 @@ class Bestman_Real_Xarm6:
             robotiq_response: See the robotiq documentation 
         """
         return self.robot.robotiq_open(speed=speed, force=force, wait=wait, timeout=timeout, **kwargs)
-
-
-    def close_gripper_xarm(self):
-        '''Closes the gripper to its minimum position with maximum speed and force.'''
-        self.gripper_goto(value=0, speed=5000, force=None)
-
 
     def close_gripper_robotiq(self, speed=0xFF, force=0xFF, wait=False, timeout=5, **kwargs):
         """
