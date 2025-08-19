@@ -150,7 +150,7 @@ class Bestman_Real_Xarm6:
         except Exception as e:
             self.log.error(f"Error updating robot states: {str(e)}")
 
-    def go_home(self):
+    def move_to_home(self):
         # DONE
         """
         Moves the robot arm to its initial (home) pose.
@@ -188,7 +188,7 @@ class Bestman_Real_Xarm6:
             self.log.error(f"Cannot go home: {str(e)}")
 
 
-    def set_pay_load(self, payload_weight, payload_cog):
+    def set_payload(self, payload_weight, payload_cog):
         # TODO
         self.robot.set_tcp_load(payload_weight, payload_cog)
 
@@ -208,7 +208,7 @@ class Bestman_Real_Xarm6:
 
         return list(zip(joint_min, joint_max))
 
-    def print_arm_jointInfo(self):
+    def print_links_info(self):
         # TODO
         """
         Prints the joint and link information of the robot's arm.
@@ -230,7 +230,7 @@ class Bestman_Real_Xarm6:
         """
         return list(range(len(self.active_joints)))
 
-    def get_DOF(self):
+    def get_dof(self):
         # DONE
         """
         Retrieves the degree of freedom (DOF) of the xArm robot.
@@ -242,7 +242,7 @@ class Bestman_Real_Xarm6:
         self.log.info(f"Robot DOF: {dof}")
         return dof
 
-    def get_tcp_link(self):
+    def get_links_info(self):
         # TODO
         """
         Retrieves the name of the TCP (Tool Center Point) link.
@@ -258,7 +258,7 @@ class Bestman_Real_Xarm6:
             self.log.error(f"Failed to retrieve TCP link: {str(e)}")
             return None
 
-    def get_current_joint_values(self):
+    def get_joint_angles(self):
         # DONE
         """
         Retrieves the current joint angles of the robot arm.
@@ -270,13 +270,13 @@ class Bestman_Real_Xarm6:
             # Get joint states and extract joint angles for the first 6 joints
             joint_states = self.robot.get_joint_states(is_radian=True)
             joint_values = joint_states[1][0][:6]
-            self.log.info(f"Current joint values: {joint_values}")
+            self.log.info(f"Current joint angles: {joint_values}")
             return joint_values
         except Exception as e:
-            self.log.error(f"Failed to retrieve current joint values: {str(e)}")
+            self.log.error(f"Failed to retrieve current joint angles: {str(e)}")
             return []
 
-    def get_current_joint_velocities(self):
+    def get_joint_velocities(self):
         """
         Retrieves the current joint velocities of the robot arm.
 
@@ -293,7 +293,7 @@ class Bestman_Real_Xarm6:
             self.log.error(f"Failed to retrieve current joint velocities: {str(e)}")
             return []
 
-    def get_current_eef_pose(self):
+    def get_eef_pose(self):
         # DONE
         """
         Retrieves the current pose of the robot arm's end effector.
@@ -321,7 +321,7 @@ class Bestman_Real_Xarm6:
             self.log.error(f"Failed to retrieve end effector pose: {str(e)}")
             return None
 
-    def move_arm_to_joint_values(self, joint_values, target_vel=None, target_acc=None, max_vel=None, max_acc=None):
+    def move_to_joint_angles(self, joint_values, target_vel=None, target_acc=None, max_vel=None, max_acc=None):
         # DONE
         """
         Moves the robotic arm to a specific set of joint values.
@@ -350,17 +350,17 @@ class Bestman_Real_Xarm6:
 
             if result != 0:
                 self.log.error(
-                    f"Failed to move arm to joint values: {joint_values}. Error code: {result}"
+                    f"Failed to move arm to joint angles: {joint_values}. Error code: {result}"
                 )
             else:
-                self.log.info(f"Moving arm to joint values: {joint_values}")
+                self.log.info(f"Moving arm to joint angles: {joint_values}")
 
         except Exception as e:
             self.log.error(
-                f"An error occurred while moving arm to joint values: {str(e)}"
+                f"An error occurred while moving arm to joint angles: {str(e)}"
             )
 
-    def get_current_tcp_speed(self):
+    def get_eef_velocities(self):
         # TODO
         """
         Retrieves the current tcp velocities of the robot arm.
@@ -375,7 +375,7 @@ class Bestman_Real_Xarm6:
     # End Effector (EEF) Functions
     # ----------------------------------------------------------------
 
-    def move_eef_to_goal_pose(self, goal_pose, max_linear_vel=100, max_angular_vel=5000):
+    def move_to_eef_pose(self, goal_pose, max_linear_vel=100, max_angular_vel=5000):
         """
         Move arm's end effector to a target position.
 
@@ -416,7 +416,7 @@ class Bestman_Real_Xarm6:
         except Exception as e:
             self.log.error(f"Failed to move end effector to goal pose: {str(e)}")
 
-    def move_eef_to_tcp_velocity(self, _velocity_setpoint, _duration):
+    def set_eef_velocity(self, _velocity_setpoint, _duration):
         #TODO
         """
         Move arm's end effector to a target tcp velocity.
@@ -442,7 +442,7 @@ class Bestman_Real_Xarm6:
             duration=_duration,
         )
 
-    def rotate_eef_tcp(self, axis, angle):
+    def rotate_eef_joint(self, axis, angle):
         # TODO
         """
         Rotate the end effector of the robot arm by a specified angle by joint.
@@ -551,7 +551,7 @@ class Bestman_Real_Xarm6:
             raise
 
 
-    def calculate_IK_error(self, goal_position, goal_orientation):
+    def calculate_ik_error(self, goal_position, goal_orientation):
         """
         Calculate the inverse kinematics (IK) error for performing pick-and-place manipulation of an object using a robot arm.
 
@@ -611,7 +611,7 @@ class Bestman_Real_Xarm6:
 
         return gripper_pos[1]
 
-    def gripper_goto_xarm(self, value, speed=5000, force=None):
+    def set_gripper_position_xarm(self, value, speed=5000, force=None):
         """
         Moves the gripper to a specified position with given speed.
 
@@ -655,7 +655,7 @@ class Bestman_Real_Xarm6:
         gripper_width = status[1][-2]
         return gripper_width
 
-    def gripper_goto_robotiq(self, width, speed=0xFF, force=0xFF, wait=False, timeout=5, **kwargs):
+    def set_gripper_position_robotiq(self, width, speed=0xFF, force=0xFF, wait=False, timeout=5, **kwargs):
         # DONE
         """
         Go to the position with determined speed and force.
