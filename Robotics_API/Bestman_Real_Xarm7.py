@@ -72,7 +72,7 @@ class Bestman_Real_Xarm7(Bestman_Real_Xarm6):
         except Exception as e:
             self.log.error(f"[XArm7] Error updating robot states: {str(e)}")
 
-    def get_DOF(self):
+    def get_dof(self):
         """Override DOF to 7."""
         dof = 7
         self.log.info(f"Robot DOF: {dof}")
