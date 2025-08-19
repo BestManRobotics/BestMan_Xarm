@@ -40,7 +40,7 @@ def main():
         # Close gripper
         bestman.find_gripper_xarm()
         bestman.close_gripper_xarm()
-        print(bestman.get_eef_pose())
+        print(bestman.get_eef_pos())
 
 
     except Exception as e:
