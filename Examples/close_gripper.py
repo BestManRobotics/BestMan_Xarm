@@ -38,9 +38,9 @@ def main():
         #     log.info("Fault on the robot server is cleared")
 
         # Close gripper
-        bestman.find_gripper()
-        bestman.close_gripper()
-        print(bestman.get_current_end_effector_pose())
+        bestman.find_gripper_xarm()
+        bestman.close_gripper_xarm()
+        print(bestman.get_eef_pose())
 
 
     except Exception as e:
