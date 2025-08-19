@@ -37,7 +37,7 @@ def main():
         # target_pose = Pose([0.420434235, -0.00581615, 0.459876038], [0.7071068218077394, -0.00032550013355177364, 0.7071065907288765, 0.0003255002399235735]) # 四元数
 
         # Move the arm to follow the target trajectory
-        bestman.move_to_eef_pos(mvpose)
+        bestman.set_eef_cmd(mvpose)
 
     except Exception as e:
         # Log any exceptions that occur
