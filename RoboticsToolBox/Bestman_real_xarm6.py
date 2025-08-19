@@ -331,7 +331,7 @@ class Bestman_Real_Xarm6:
     # Functions for IK/FK
     # ----------------------------------------------------------------
 
-    def forward_kinematics(self, joint_angles):
+    def joints_to_cartesian(self, joint_angles):
         '''
         Transforms the robot arm's joint angles to its Cartesian coordinates.
 
@@ -366,7 +366,7 @@ class Bestman_Real_Xarm6:
 
         return position, orientation
     
-    def inverse_kinematics(self, position, orientation):
+    def cartesian_to_joints(self, position, orientation):
         '''
         Transforms the robot arm's Cartesian coordinates to its joint angles.
 
