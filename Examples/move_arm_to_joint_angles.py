@@ -49,7 +49,7 @@ def main():
         
             _joint_angles = np.add(_joint_angles, [-0.05, -0.05, -0.05, -0.05, -0.05, -0.05])
             print(_joint_angles)
-            bestman.move_to_joint_angles(joint_angles=_joint_angles, wait_for_finish=False)
+            bestman.move_to_joint_ang(joint_angles=_joint_angles, wait_for_finish=False)
             sleep(1)
         bestman.move_to_home()
 
