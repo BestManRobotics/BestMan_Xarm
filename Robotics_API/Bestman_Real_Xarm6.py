@@ -150,7 +150,7 @@ class Bestman_Real_Xarm6:
         except Exception as e:
             self.log.error(f"Error updating robot states: {str(e)}")
 
-    def move_to_home(self):
+    def reset_to_home(self):
         # DONE
         """
         Moves the robot arm to its initial (home) pose.
@@ -258,7 +258,7 @@ class Bestman_Real_Xarm6:
             self.log.error(f"Failed to retrieve TCP link: {str(e)}")
             return None
 
-    def get_joint_ang(self):
+    def get_joint_state(self):
         # DONE
         """
         Retrieves the current joint angles of the robot arm.
@@ -293,7 +293,7 @@ class Bestman_Real_Xarm6:
             self.log.error(f"Failed to retrieve current joint velocities: {str(e)}")
             return []
 
-    def get_eef_pos(self):
+    def get_eef_state(self):
         # DONE
         """
         Retrieves the current pose of the robot arm's end effector.
@@ -321,7 +321,7 @@ class Bestman_Real_Xarm6:
             self.log.error(f"Failed to retrieve end effector pose: {str(e)}")
             return None
 
-    def move_to_joint_ang(self, joint_values, target_vel=None, target_acc=None, max_vel=None, max_acc=None):
+    def set_joint_cmd(self, joint_values, target_vel=None, target_acc=None, max_vel=None, max_acc=None):
         # DONE
         """
         Moves the robotic arm to a specific set of joint values.
@@ -375,7 +375,7 @@ class Bestman_Real_Xarm6:
     # End Effector (EEF) Functions
     # ----------------------------------------------------------------
 
-    def move_to_eef_pos(self, goal_pose, max_linear_vel=100, max_angular_vel=5000):
+    def set_eef_cmd(self, goal_pose, max_linear_vel=100, max_angular_vel=5000):
         """
         Move arm's end effector to a target position.
 
@@ -465,7 +465,7 @@ class Bestman_Real_Xarm6:
     # ----------------------------------------------------------------
     # Functions for IK
     # ----------------------------------------------------------------
-    def joints_to_cartesian(self, joint_values):
+    def forward_kinematics(self, joint_values):
         # DONE
         """
         Converts the robot's joint angles to its Cartesian coordinates.
@@ -509,7 +509,7 @@ class Bestman_Real_Xarm6:
             self.log.error(f"Error converting joint values to Cartesian: {str(e)}")
             raise
 
-    def cartesian_to_joints(self, pose, initial_joint_values=None):
+    def inverse_kinematics(self, pose, initial_joint_values=None):
         # DONE
         """
         Converts the robot's Cartesian coordinates to its joint angles.
