@@ -40,8 +40,8 @@ def main():
         # bestman.get_current_eef_pose()
 
         # Test
-        gt_pose = bestman.get_eef_pos()
-        gt_joint = bestman.get_joint_ang()
+        gt_pose = bestman.get_eef_state()
+        gt_joint = bestman.get_joint_state()
 
         # gt_joint[1] += 0.3
         # bestman.move_to_joint_angles(gt_joint)
@@ -63,13 +63,13 @@ def main():
         # # print(f'test position:{pose.position}, test orientation:{pose.orientation}')
         # # bestman.move_eef_to_goal_pose(pose)
         
-        trans_joint = bestman.cartesian_to_joints(gt_pose)
+        trans_joint = bestman.inverse_kinematics(gt_pose)
         print(f'trans_joint:{trans_joint}')
-        bestman.move_to_joint_ang(trans_joint)
+        bestman.set_joint_cmd(trans_joint)
 
-        trans_pose = bestman.joints_to_cartesian(gt_joint)
+        trans_pose = bestman.forward_kinematics(gt_joint)
         print(f'trans_pose:{trans_pose}')
-        bestman.move_to_eef_pos(trans_pose)
+        bestman.set_eef_cmd(trans_pose)
 
         bestman.close_gripper_robotiq()
         bestman.open_gripper_robotiq()
