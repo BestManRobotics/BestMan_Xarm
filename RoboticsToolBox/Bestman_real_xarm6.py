@@ -69,7 +69,7 @@ class Bestman_Real_Xarm6:
         print("set mode")
         self.robot.set_mode(_mode)
 
-    def move_to_home(self,dist=0):
+    def reset_to_home(self,dist=0):
         '''Move arm to initial pose.'''
 
         self.robot.set_position(x=396.4+dist, y=-5.5,z=360,roll=-90,pitch=-90,yaw=-90,wait=False)
@@ -154,7 +154,7 @@ class Bestman_Real_Xarm6:
         '''
         return self.robot_chain.links[6].name
 
-    def get_joint_ang(self):
+    def get_joint_state(self):
         '''
         Retrieves the current joint angles of the robot arm.
 
@@ -179,7 +179,7 @@ class Bestman_Real_Xarm6:
 
         return _joint_velocities
 
-    def get_eef_pos(self):
+    def get_eef_state(self):
         '''
         Retrieves the current pose of the robot arm's end effector.
 
@@ -227,7 +227,7 @@ class Bestman_Real_Xarm6:
             for i, link in enumerate(self.robot_chain.links[1:]):  # Assuming the arm starts from the second link
                 print(f"Link {i + 1}: {link.name}")
 
-    def move_to_joint_ang(self, joint_angles, target_vel=None, target_acc=None, MAX_VEL=None, MAX_ACC=None, wait_for_finish=None):
+    def set_joint_cmd(self, joint_angles, target_vel=None, target_acc=None, MAX_VEL=None, MAX_ACC=None, wait_for_finish=None):
         '''
         Move arm to a specific set of joint angles, considering physics.
 
@@ -243,7 +243,7 @@ class Bestman_Real_Xarm6:
 
         self.robot.set_servo_angle(angle=joint_angles, is_radian=True, speed=0.7, wait=wait_for_finish) # speed in rad/s
 
-    def move_to_joint_ang_traj(self, target_trajectory, target_vel=None, target_acc=None, MAX_VEL=None, MAX_ACC=None):
+    def set_joint_traj(self, target_trajectory, target_vel=None, target_acc=None, MAX_VEL=None, MAX_ACC=None):
         '''
         Move arm to a few set of joint angles, considering physics.
 
@@ -297,7 +297,7 @@ class Bestman_Real_Xarm6:
                                                     _velocity_setpoint[5]],
                                                     duration=_duration)
 
-    def move_to_eef_pos(self, end_effector_goal_pose, speed=1000, mvacc=50000, wait=False):
+    def set_eef_cmd(self, end_effector_goal_pose, speed=1000, mvacc=50000, wait=False):
         '''
         Move arm's end effector to a target position.
 
@@ -331,7 +331,7 @@ class Bestman_Real_Xarm6:
     # Functions for IK/FK
     # ----------------------------------------------------------------
 
-    def joints_to_cartesian(self, joint_angles):
+    def forward_kinematics(self, joint_angles):
         '''
         Transforms the robot arm's joint angles to its Cartesian coordinates.
 
@@ -366,7 +366,7 @@ class Bestman_Real_Xarm6:
 
         return position, orientation
     
-    def cartesian_to_joints(self, position, orientation):
+    def inverse_kinematics(self, position, orientation):
         '''
         Transforms the robot arm's Cartesian coordinates to its joint angles.
 
