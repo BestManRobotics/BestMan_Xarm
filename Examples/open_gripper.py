@@ -38,7 +38,7 @@ def main():
         #     log.info("Fault on the robot server is cleared")
 
         # open gripper
-        bestman.open_gripper()
+        bestman.open_gripper_xarm()
 
 
     except Exception as e:
