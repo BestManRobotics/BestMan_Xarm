@@ -40,7 +40,7 @@ def main():
         # Enable the robot, ensuring the E-stop is released before enabling
         # log.info("Enabling robot ...")
         # bestman.robot.enable()
-        bestman.go_home()
+        bestman.move_to_home()
 
         _joint_angles = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
 
@@ -49,9 +49,9 @@ def main():
         
             _joint_angles = np.add(_joint_angles, [-0.05, -0.05, -0.05, -0.05, -0.05, -0.05])
             print(_joint_angles)
-            bestman.move_arm_to_joint_angles(joint_angles=_joint_angles, wait_for_finish=False)
+            bestman.move_to_joint_angles(joint_angles=_joint_angles, wait_for_finish=False)
             sleep(1)
-        bestman.go_home()
+        bestman.move_to_home()
 
 
     except Exception as e:
