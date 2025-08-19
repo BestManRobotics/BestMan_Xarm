@@ -31,7 +31,7 @@ def main():
             return  # Exit if initialization fails
 
         # Go back to home pose
-        bestman.go_home()
+        bestman.move_to_home()
         time.sleep(1)
 
     except Exception as e:
