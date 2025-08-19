@@ -40,14 +40,14 @@ def main():
         # bestman.get_current_eef_pose()
 
         # Test
-        gt_pose = bestman.get_current_eef_pose()
-        gt_joint = bestman.get_current_joint_values()
+        gt_pose = bestman.get_eef_pose()
+        gt_joint = bestman.get_joint_angles()
 
         # gt_joint[1] += 0.3
-        # bestman.move_arm_to_joint_values(gt_joint)
+        # bestman.move_to_joint_angles(gt_joint)
         
         # gt_pose.position[2] += 0.3
-        # bestman.move_eef_to_goal_pose(gt_pose)
+        # bestman.move_to_eef_pose(gt_pose)
 
         # print(f'gt position:{gt_pose.position}, gt orientation:{gt_pose.orientation}')
         # print(f'gt joint:{gt_joint}')
@@ -65,15 +65,15 @@ def main():
         
         trans_joint = bestman.cartesian_to_joints(gt_pose)
         print(f'trans_joint:{trans_joint}')
-        bestman.move_arm_to_joint_values(trans_joint)
+        bestman.move_to_joint_angles(trans_joint)
 
         trans_pose = bestman.joints_to_cartesian(gt_joint)
         print(f'trans_pose:{trans_pose}')
-        bestman.move_eef_to_goal_pose(trans_pose)
+        bestman.move_to_eef_pose(trans_pose)
 
         bestman.close_gripper_robotiq()
         bestman.open_gripper_robotiq()
-        bestman.gripper_goto_robotiq(100)
+        bestman.set_gripper_position_robotiq(100)
         # print(bestman.get_gripper_position_robotiq())
         
     except Exception as e:
