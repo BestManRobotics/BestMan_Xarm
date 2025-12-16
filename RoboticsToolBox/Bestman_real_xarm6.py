@@ -11,7 +11,7 @@ from scipy.spatial.transform import Rotation as R
 import sys
 import os
 import minimalmodbus as mm
-import pyRobotiqGripper
+import pyrobotiqgripper
 
 from xarm.wrapper import XArmAPI
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -69,7 +69,7 @@ class Bestman_Real_Xarm6:
         print("set mode")
         self.robot.set_mode(_mode)
 
-    def reset_to_home(self,dist=0):
+    def go_home(self,dist=0):
         '''Move arm to initial pose.'''
 
         self.robot.set_position(x=396.4+dist, y=-5.5,z=360,roll=-90,pitch=-90,yaw=-90,wait=False)
@@ -166,7 +166,7 @@ class Bestman_Real_Xarm6:
 
         return _joint_angles
     
-    def get_joint_vel(self):
+    def get_current_joint_values(self):
         '''
         Retrieves the current joint velocities of the robot arm.
 
@@ -179,7 +179,7 @@ class Bestman_Real_Xarm6:
 
         return _joint_velocities
 
-    def get_eef_state(self):
+    def get_current_eef_pose(self):
         '''
         Retrieves the current pose of the robot arm's end effector.
 
@@ -196,7 +196,7 @@ class Bestman_Real_Xarm6:
         pose[2] = pose[2] / 1000
         return pose   
 
-    def get_eef_vel(self):
+    def get_current_eef_values(self):
         '''
         Retrieves the current tcp velocities of the robot arm.
 
@@ -227,7 +227,7 @@ class Bestman_Real_Xarm6:
             for i, link in enumerate(self.robot_chain.links[1:]):  # Assuming the arm starts from the second link
                 print(f"Link {i + 1}: {link.name}")
 
-    def set_joint_cmd(self, joint_angles, target_vel=None, target_acc=None, MAX_VEL=None, MAX_ACC=None, wait_for_finish=None):
+    def move_arm_to_joint_values(self, joint_angles, target_vel=None, target_acc=None, MAX_VEL=None, MAX_ACC=None, wait_for_finish=None):
         '''
         Move arm to a specific set of joint angles, considering physics.
 
@@ -243,7 +243,7 @@ class Bestman_Real_Xarm6:
 
         self.robot.set_servo_angle(angle=joint_angles, is_radian=True, speed=0.7, wait=wait_for_finish) # speed in rad/s
 
-    def set_joint_traj(self, target_trajectory, target_vel=None, target_acc=None, MAX_VEL=None, MAX_ACC=None):
+    def move_arm_to_joint_values_traj(self, target_trajectory, target_vel=None, target_acc=None, MAX_VEL=None, MAX_ACC=None):
         '''
         Move arm to a few set of joint angles, considering physics.
 
@@ -276,7 +276,7 @@ class Bestman_Real_Xarm6:
 
     # TODO
 
-    def set_eef_vel(self, _velocity_setpoint, _duration):
+    def set_eef_values(self, _velocity_setpoint, _duration):
         '''
         Move arm's end effector to a target tcp velocity.
 
@@ -297,7 +297,7 @@ class Bestman_Real_Xarm6:
                                                     _velocity_setpoint[5]],
                                                     duration=_duration)
 
-    def set_eef_cmd(self, end_effector_goal_pose, speed=1000, mvacc=50000, wait=False):
+    def move_eef_to_goal_pose(self, end_effector_goal_pose, speed=1000, mvacc=50000, wait=False):
         '''
         Move arm's end effector to a target position.
 
@@ -310,7 +310,7 @@ class Bestman_Real_Xarm6:
 
 
 
-    def rot_eef_joint(self, angle):
+    def rotate_eef_joint(self, angle):
         '''
         Rotate the end effector of the robot arm by a specified angle by joint.
 
@@ -331,7 +331,7 @@ class Bestman_Real_Xarm6:
     # Functions for IK/FK
     # ----------------------------------------------------------------
 
-    def forward_kinematics(self, joint_angles):
+    def joints_to_cartesian(self, joint_angles):
         '''
         Transforms the robot arm's joint angles to its Cartesian coordinates.
 
@@ -366,7 +366,7 @@ class Bestman_Real_Xarm6:
 
         return position, orientation
     
-    def inverse_kinematics(self, position, orientation):
+    def cartesian_to_joints(self, position, orientation):
         '''
         Transforms the robot arm's Cartesian coordinates to its joint angles.
 
@@ -397,7 +397,7 @@ class Bestman_Real_Xarm6:
         return joint_angles[1:8]
 
 
-    def calc_ik_error(self, goal_position, goal_orientation):
+    def calculate_IK_error(self, goal_position, goal_orientation):
         '''
         Calculate the inverse kinematics (IK) error for performing pick-and-place manipulation of an object using a robot arm.
 
@@ -430,7 +430,7 @@ class Bestman_Real_Xarm6:
             print("Not found Xarm gripper")
             return None
 
-    def get_gripper_pos_xarm(self):
+    def get_gripper_pose_xarm(self):
         '''
         Get the position of the XArm gripper.
         '''
@@ -438,7 +438,7 @@ class Bestman_Real_Xarm6:
 
         return gripper_pos[1]
 
-    def set_gripper_pos_xarm(self, value, speed=5000, force=None):
+    def gripper_goto_xarm(self, value, speed=5000, force=None):
         '''
         Moves the gripper to a specified position with given speed.
 
@@ -485,11 +485,7 @@ class Bestman_Real_Xarm6:
         self.robot.robotiq_reset()
         self.robot.robotiq_set_activate()    #enable the robotiq gripper
         
-
-
-    
-
-    def get_gripper_pos_robotiq(self, number_of_registers=3):
+    def get_gripper_pose_robotiq(self, number_of_registers=3):
         """
         Reading the status of robotiq gripper
         
@@ -510,7 +506,7 @@ class Bestman_Real_Xarm6:
         gripper_width = status[1][-2]
         return gripper_width
 
-    def set_gripper_pos_robotiq(self, pos, speed=0xFF, force=0xFF, wait=False, timeout=5, **kwargs):
+    def gripper_goto_robotiq(self, pos, speed=0xFF, force=0xFF, wait=False, timeout=5, **kwargs):
         """
         Go to the position with determined speed and force.
         
