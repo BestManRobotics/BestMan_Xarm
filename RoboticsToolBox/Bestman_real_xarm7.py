@@ -6,7 +6,7 @@
 """
 
 import os
-from .Bestman_Real_Xarm6 import Bestman_Real_Xarm6
+from .Bestman_real_xarm6 import Bestman_Real_Xarm6
 from ikpy.link import URDFLink
 from scipy.spatial.transform import Rotation as R
 
