@@ -135,6 +135,22 @@ class Bestman_Real_Xarm6:
             int: The degree of freedom of the robot arm.
         '''
         return 6
+        
+    def print_joint_link_info(self, name):
+        '''
+        Prints the joint and link information of a robot.
+
+        Args:
+            name (str): 'base' or 'arm'
+        '''
+        if name == 'base':
+            print("Base joint and link information:")
+            for i, link in enumerate(self.robot_chain.links[:1]):  # Assuming the base is the first link
+                print(f"Link {i}: {link.name}")
+        elif name == 'arm':
+            print("Arm joint and link information:")
+            for i, link in enumerate(self.robot_chain.links[1:]):  # Assuming the arm starts from the second link
+                print(f"Link {i + 1}: {link.name}")
 
     def get_joint_idx(self):
         '''
@@ -145,7 +161,7 @@ class Bestman_Real_Xarm6:
         '''
         return list(range(len(self.active_joints)))
     
-    def get_links_info(self):
+    def get_tcp_link(self):
         '''
         Retrieves the TCP (Tool Center Point) link of the robot arm.
 
@@ -154,7 +170,7 @@ class Bestman_Real_Xarm6:
         '''
         return self.robot_chain.links[6].name
 
-    def get_joint_state(self):
+    def get_current_joint_angles(self):
         '''
         Retrieves the current joint angles of the robot arm.
 
@@ -210,22 +226,6 @@ class Bestman_Real_Xarm6:
     # ----------------------------------------------------------------
     # Functions for joint control
     # ----------------------------------------------------------------
-
-    def print_links_info(self, name):
-        '''
-        Prints the joint and link information of a robot.
-
-        Args:
-            name (str): 'base' or 'arm'
-        '''
-        if name == 'base':
-            print("Base joint and link information:")
-            for i, link in enumerate(self.robot_chain.links[:1]):  # Assuming the base is the first link
-                print(f"Link {i}: {link.name}")
-        elif name == 'arm':
-            print("Arm joint and link information:")
-            for i, link in enumerate(self.robot_chain.links[1:]):  # Assuming the arm starts from the second link
-                print(f"Link {i + 1}: {link.name}")
 
     def move_arm_to_joint_values(self, joint_angles, target_vel=None, target_acc=None, MAX_VEL=None, MAX_ACC=None, wait_for_finish=None):
         '''
