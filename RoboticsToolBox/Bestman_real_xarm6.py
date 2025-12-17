@@ -182,7 +182,7 @@ class Bestman_Real_Xarm6:
 
         return _joint_angles
     
-    def get_current_joint_values(self):
+    def get_current_joint_velocities(self):
         '''
         Retrieves the current joint velocities of the robot arm.
 
@@ -212,15 +212,15 @@ class Bestman_Real_Xarm6:
         pose[2] = pose[2] / 1000
         return pose   
 
-    def get_current_eef_values(self):
+    def get_current_eef_velocities(self):
         '''
         Retrieves the current tcp velocities of the robot arm.
 
         Returns:
             list: A list of the current tcp velocities of the robot arm.
         '''
-        speed = self.robot.realtime_tcp_speed
-        return speed
+        velocities = self.robot.realtime_tcp_speed
+        return velocities
 
     
     # ----------------------------------------------------------------
@@ -276,7 +276,7 @@ class Bestman_Real_Xarm6:
 
     # TODO
 
-    def set_eef_values(self, _velocity_setpoint, _duration):
+    def set_eef_velocities(self, _velocity_setpoint, _duration):
         '''
         Move arm's end effector to a target tcp velocity.
 
