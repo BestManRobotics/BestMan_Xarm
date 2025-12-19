@@ -47,9 +47,27 @@ class Bestman_Real_Xarm6:
         '''Clear fault, and updates the current robot states.'''
         self.robot.set_state(0)
 
+    def clear_warn(self):
+        '''Clear warning, and updates the current robot states.'''
+        self.robot.warn_code
+    
+    def get_warn_code(self):
+        '''Get the warning code of the robot.'''
+        return self.robot.warn_code
+    
+    def clear_error(self):
+        '''Clear error, and updates the current robot states.'''
+        self.robot.error_code
+
+    def get_error_code(self):
+        '''Get the error code of the robot.'''
+        return self.robot.error_code
+    
+
     def update_robot_states(self):
         '''Updates the current robot states.'''
         self.robot.getRobotStates(self.robot_states)
+    
 
     def set_mode(self, _mode):
         '''
@@ -68,6 +86,25 @@ class Bestman_Real_Xarm6:
         '''
         print("set mode")
         self.robot.set_mode(_mode)
+ 
+
+    def set_motion_enable(self, enable=True):
+        '''
+        Enable or disable the robot motion.
+        '''
+        return self.robot.motion_enable(enable =enable)
+    
+    def configure_modbus_baudrate(self, baudrate=115200):
+        '''
+        Configure the modbus baudrate of the robot.
+        '''
+        return self.robot.set_tgpio_modbus_baudrate(baudrate)
+
+    def set_state(self, _state):
+        '''
+        Set the state of the robot.
+        '''
+        return self.robot.set_state(_state)
 
     def go_home(self,dist=0):
         '''Move arm to initial pose.'''
@@ -308,7 +345,11 @@ class Bestman_Real_Xarm6:
         self.robot.set_position(x=end_effector_goal_pose[0]*1000 , y=end_effector_goal_pose[1]*1000,z=end_effector_goal_pose[2]*1000,
                                 roll=end_effector_goal_pose[3],pitch=end_effector_goal_pose[4],yaw=end_effector_goal_pose[5], speed=speed, mvacc=mvacc, is_radian=True, wait=wait)
 
-
+    def move_servo_cartesian(self, pose, is_radian=None):
+        '''
+        Move the servo cartesian of the robot arm.
+        '''
+        return self.robot.set_servo_cartesian(pose, is_radian=is_radian)
 
     def rotate_eef_joint(self, angle):
         '''
@@ -463,7 +504,18 @@ class Bestman_Real_Xarm6:
         self.gripper_goto(value=0, speed=5000, force=None)
     
 ### Robotiq
+    def reset_robotic_gripper(self):
+        '''
+        Reset the robotic gripper.
+        '''
+        return self.robot.robotiq_reset()
     
+    def activate_robotic_gripper(self, activate=True):
+        '''
+        Activate the robotic gripper.
+        '''
+        return self.robot.robotiq_set_activate()
+
     def find_gripper_robotiq(self):
         """
         Config the parameter via Python SDK
@@ -551,3 +603,10 @@ class Bestman_Real_Xarm6:
             robotiq_response: See the robotiq documentation
         """
         return self.robot.robotiq_close(speed=speed, force=force, wait=wait, timeout=timeout, **kwargs)
+
+        
+    def close_connect(self):
+        '''
+        Disconnect the robot.
+        '''
+        return self.robot.disconnect()
