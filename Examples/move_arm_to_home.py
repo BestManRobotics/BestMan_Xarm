@@ -6,7 +6,11 @@ python3 move_arm_to_home.py 192.168.1.208
 
 import sys
 import os
-from Bestman_real_xarm6 import *
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if REPO_ROOT not in sys.path:
+    sys.path.insert(0, REPO_ROOT)
+
+from RoboticsToolBox.Bestman_real_xarm6 import Bestman_Real_Xarm6
 from time import time, sleep
 
 def main():
