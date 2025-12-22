@@ -42,7 +42,7 @@ def main():
         # bestman.robot.enable()
 
         # Go back to home pose
-        bestman.reset_to_home()
+        bestman.go_home()
         sleep(1)
 
     except Exception as e:
