@@ -62,7 +62,22 @@ class Bestman_Real_Xarm6:
     def get_error_code(self):
         '''Get the error code of the robot.'''
         return self.robot.error_code
-    
+
+    def initialize_robot(self):
+        """
+        Initializes the robot by clearing faults and enabling it.
+        """
+        try:
+            self.log.info("Checking for faults on the robot...")
+            self.robot.clean_error()
+            self.robot.clean_warn()
+            time.sleep(2)
+            self.log.info(f"Successfully initialize the robot")
+            return True
+
+        except Exception as e:
+            self.log.error(f"Failed to initialize the robot: {str(e)}")
+            return False
 
     def update_robot_states(self):
         '''Updates the current robot states.'''
@@ -504,15 +519,15 @@ class Bestman_Real_Xarm6:
         self.gripper_goto(value=0, speed=5000, force=None)
     
 ### Robotiq
-    def reset_robotic_gripper(self):
+    def reset_robotiq_gripper(self):
         '''
-        Reset the robotic gripper.
+        Reset the robotiq gripper.
         '''
         return self.robot.robotiq_reset()
     
-    def activate_robotic_gripper(self, activate=True):
+    def activate_robotiq_gripper(self, activate=True):
         '''
-        Activate the robotic gripper.
+        Activate the robotiq gripper.
         '''
         return self.robot.robotiq_set_activate()
 
