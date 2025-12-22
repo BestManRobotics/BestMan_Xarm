@@ -49,9 +49,9 @@ def main():
         
             _joint_angles = np.add(_joint_angles, [-0.05, -0.05, -0.05, -0.05, -0.05, -0.05])
             print(_joint_angles)
-            bestman.set_joint_cmd(joint_angles=_joint_angles, wait_for_finish=False)
+            bestman.move_arm_to_joint_values(joint_angles=_joint_angles, wait_for_finish=False)
             sleep(1)
-        bestman.reset_to_home()
+        bestman.go_home()
 
 
     except Exception as e:
