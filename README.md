@@ -38,7 +38,6 @@ python3 open_gripper.py 192.168.1.208
 python3 open_gripper_width.py 192.168.1.208
 ```
 
-(We are fixing other demos.)
 
 ##  :handshake: Reference
 - [IKPy’s documentation](https://ikpy.readthedocs.io/en/latest/index.html)
