@@ -12,7 +12,7 @@ import sys
 import os
 import minimalmodbus as mm
 import pyrobotiqgripper
-
+import logging
 from xarm.wrapper import XArmAPI
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
