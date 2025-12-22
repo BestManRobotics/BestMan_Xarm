@@ -12,47 +12,28 @@ sys.path.append(os.path.join(parent_dir, 'RoboticsToolBox'))
 from Bestman_real_xarm6 import *
 from time import time, sleep
 import numpy as np
+
 def main():
     # Parse Arguments
-    argparser = argparse.ArgumentParser(description="Xarm6.")
+    argparser = argparse.ArgumentParser(
+        description="Move the robot arm to follow a trajectory."
+    )
     # Required arguments
     argparser.add_argument("robot_ip", help="IP address of the robot server")
-    # argparser.add_argument("local_ip", help="IP address of this PC")
-    # argparser.add_argument("frequency", type=int, help="Command frequency, 1 to 200 [Hz]")
-    # Optional arguments
-    # argparser.add_argument("--hold", action="store_true", help="Robot holds current joint positions, otherwise do a sine-sweep")
     args = argparser.parse_args()
 
     try:
         # Instantiate the robot interface
-        bestman = Bestman_Real_Xarm6(args.robot_ip, None, None)
+        bestman = Bestman_Real_Xarm6(args.robot_ip)
 
-        # Clear fault on the robot server if any
-        # if bestman.robot.isFault():
-        #     log.warn("Fault occurred on the robot server, trying to clear ...")
-        #     bestman.robot.clearFault()
-        #     time.sleep(2)
-        #     if bestman.robot.isFault():
-        #         log.error("Fault cannot be cleared, exiting ...")
-        #         return
-        #     log.info("Fault on the robot server is cleared")
+        # Initialize robot
+        if not bestman.initialize_robot():
+            return  # Exit if initialization fails
 
-        # Enable the robot, ensuring the E-stop is released before enabling
-        # log.info("Enabling robot ...")
-        # bestman.robot.enable()
-        bestman.reset_to_home()
-
-        _joint_angles = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
-
-        # Go back to home pose
-        for i in range(10):
-        
-            _joint_angles = np.add(_joint_angles, [-0.05, -0.05, -0.05, -0.05, -0.05, -0.05])
-            print(_joint_angles)
-            bestman.move_arm_to_joint_values(joint_angles=_joint_angles, wait_for_finish=False)
-            sleep(1)
-        bestman.go_home()
-
+        import math
+        target_joint = [16.8, -24.1, -24.7, 11.2, -77.7, -5.1]
+        target_joint = [math.radians(target_joint[n]) for n in range(6)]
+        bestman.move_arm_to_joint_values(target_joint)
 
     except Exception as e:
         # Log any exceptions that occur
