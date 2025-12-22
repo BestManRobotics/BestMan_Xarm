@@ -3,7 +3,7 @@ import os
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if REPO_ROOT not in sys.path:
     sys.path.insert(0, REPO_ROOT)
-
+import argparse
 from RoboticsToolBox.Bestman_real_xarm6 import Bestman_Real_Xarm6
 from time import time, sleep
 import numpy as np
