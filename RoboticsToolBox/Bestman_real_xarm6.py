@@ -349,7 +349,7 @@ class Bestman_Real_Xarm6:
                                                     _velocity_setpoint[5]],
                                                     duration=_duration)
 
-    def move_eef_to_goal_pose(self, end_effector_goal_pose, speed=1000, mvacc=50000, wait=False):
+    def move_eef_to_goal_pose(self, end_effector_goal_pose, speed=1000, mvacc=50000, wait=False, is_radian=True):
         '''
         Move arm's end effector to a target position.
 
@@ -358,7 +358,7 @@ class Bestman_Real_Xarm6:
         '''
 
         self.robot.set_position(x=end_effector_goal_pose[0]*1000 , y=end_effector_goal_pose[1]*1000,z=end_effector_goal_pose[2]*1000,
-                                roll=end_effector_goal_pose[3],pitch=end_effector_goal_pose[4],yaw=end_effector_goal_pose[5], speed=speed, mvacc=mvacc, is_radian=True, wait=wait)
+                                roll=end_effector_goal_pose[3],pitch=end_effector_goal_pose[4],yaw=end_effector_goal_pose[5], speed=speed, mvacc=mvacc, is_radian=is_radian, wait=wait)
 
     def move_servo_cartesian(self, pose, is_radian=None):
         '''
