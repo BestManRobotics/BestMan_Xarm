@@ -40,12 +40,6 @@ python3 open_gripper_width.py 192.168.1.208
 
 (We are fixing other demos.)
 
-
-## 📧 Contact Information
-
-If you have any questions or need further assistance, please feel free to reach out via email:
-- zhaxizhuoma at pjlab.org.cn
-
 ##  :handshake: Reference
 - [IKPy’s documentation](https://ikpy.readthedocs.io/en/latest/index.html)
 - [xArm-Python-SDK ](https://github.com/xArm-Developer/xArm-Python-SDK)
