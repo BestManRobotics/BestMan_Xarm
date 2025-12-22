@@ -18,6 +18,7 @@ Welcome to the BestMan_Xarm repository, a codebase dedicated to the XArm 6 robot
 - (Optional) Create conda environment
 
     ```
+    cd install
     conda env create -f basic_environment.yaml
     ```
 
