@@ -78,7 +78,7 @@ def main():
         ]
 
         # Move the arm to follow the target trajectory
-        bestman.move_arm_follow_joint_angles(target_trajectory)
+        bestman.move_arm_to_joint_values_traj(target_trajectory)
         time.sleep(1)
 
     except Exception as e:
