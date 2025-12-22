@@ -18,7 +18,7 @@ Welcome to the BestMan_Xarm repository, a codebase dedicated to the XArm 6 robot
 - (Optional) Create conda environment
 
     ```
-    cd install
+    cd Install
     conda env create -f basic_environment.yaml
     ```
 
@@ -29,23 +29,6 @@ Welcome to the BestMan_Xarm repository, a codebase dedicated to the XArm 6 robot
     git clone https://github.com/xArm-Developer/xArm-Python-SDK.git
     python3 setup.py install
     ```
-
-- Clone the BestMan_Xarm Repository
-
-    ```bash
-    git clone https://github.com/yding25/BestMan_Xarm.git
-    ```
-
-
-
-## 🔎 Project Structure
-
-Generate and view the project structure:
-
-```bash
-doxygen Doxyfile
-firefox /home/$(whoami)/BestMan_Xarm/docs/html/index.html # API document
-```
 
 ## 👨‍💻 Basic Demos
 
@@ -69,9 +52,7 @@ python3 open_gripper_width.py 192.168.1.208
 ## 📧 Contact Information
 
 If you have any questions or need further assistance, please feel free to reach out via email:
-- dingyan at pjlab.org.cn
 - zhaxizhuoma at pjlab.org.cn
-- wuziniu at pjlab.org.cn
 
 ##  :handshake: Reference
 - [IKPy’s documentation](https://ikpy.readthedocs.io/en/latest/index.html)
