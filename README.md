@@ -22,12 +22,6 @@ Welcome to the BestMan_Xarm repository, a codebase dedicated to the XArm 6 robot
     conda env create -f basic_environment.yaml
     ```
 
-- Install xArm-Python-SDK
-
-    ```bash
-    pip install xarm-python-sdk
-    ```
-
 ## 👨‍💻 Basic Demos
 
 ```bash
