@@ -31,7 +31,7 @@ class Bestman_Real_Xarm6:
         self.first_init_flag = True
         self.gripper = True # have gripper by default
         self.frequency = frequency
-
+        self.log = logging.getLogger(self.__class__.__name__)
         # # URDF
         # urdf_file = os.path.join(current_dir, "../Asset/xarm6_robot.urdf")
         # self.robot_chain = Chain.from_urdf_file(urdf_file)
