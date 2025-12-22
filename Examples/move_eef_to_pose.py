@@ -26,7 +26,7 @@ def main():
             return  # Exit if initialization fails
 
         # Define the target trajectory
-        target_pose = [0.420434235, -0.00581615, 0.459876038, 0.7071068218077394, -0.00032550013355177364, 0.7071065907288765, 0.0003255002399235735] # 四元数
+        target_pose = [0.420434235, -0.00581615, 0.459876038, 180, -90, 0] # 四元数
 
         # Move the arm to follow the target trajectory
         bestman.move_eef_to_goal_pose(target_pose)
