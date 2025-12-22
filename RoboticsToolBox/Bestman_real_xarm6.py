@@ -22,7 +22,7 @@ class Bestman_Real_Xarm6:
     # Functions for initalization
     # ----------------------------------------------------------------
 
-    def __init__(self, robot_ip, local_ip, frequency):
+    def __init__(self, robot_ip, local_ip=None, frequency=None):
         # Initialize the robot and gripper with the provided IPs and frequency
         self.robot = XArmAPI(robot_ip)
         local_ip = None
