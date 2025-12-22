@@ -512,11 +512,11 @@ class Bestman_Real_Xarm6:
 
     def open_gripper_xarm(self):
         ''' Opens the gripper to its maximum position with maximum speed and force. '''
-        self.gripper_goto(value=850, speed=5000, force=None)
+        self.gripper_goto_xarm(value=850, speed=5000, force=None)
 
     def close_gripper_xarm(self):
         '''Closes the gripper to its minimum position with maximum speed and force.'''
-        self.gripper_goto(value=0, speed=5000, force=None)
+        self.gripper_goto_xarm(value=0, speed=5000, force=None)
     
 ### Robotiq
     def reset_robotiq_gripper(self):
