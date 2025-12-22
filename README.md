@@ -25,9 +25,7 @@ Welcome to the BestMan_Xarm repository, a codebase dedicated to the XArm 6 robot
 - Install xArm-Python-SDK
 
     ```bash
-    cd ~
-    git clone https://github.com/xArm-Developer/xArm-Python-SDK.git
-    python3 setup.py install
+    pip install xarm-python-sdk
     ```
 
 ## 👨‍💻 Basic Demos
